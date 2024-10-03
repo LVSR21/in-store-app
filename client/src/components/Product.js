@@ -52,7 +52,7 @@ function Product() {
     return (
         <div className="product-container">
           <Link to="/">
-            <img src="/logo.png" alt="JD Sports Logo" className="logo" />
+            <img src="/logo.png" alt="JD Sports Logo" className="logo1" />
           </Link>
     
           <div className="input-container">
