@@ -50,68 +50,68 @@ function Product() {
     };
 
     return (
-        <div className="product-container">
-          <Link to="/">
-            <img src="/logo.png" alt="JD Sports Logo" className="logo1" />
-          </Link>
-    
-          <div className="input-container">
-            <input type="text" placeholder="Enter product code" />
-            <button>Go</button>
-          </div>
-    
-          <div className="product-image">
-            <img src={product.image} alt={product.name} />
-          </div>
-    
-          <div className="name-price-container">
-            <h1>{product.name}</h1>
-            <p className="price">{product.price}</p>
-          </div>
-    
-          {/* Product Specifications */}
-          <div className="specifications">
-            <h2>Product Specifications:</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Specification</th>
-                  <th>Details</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(product.specifications).map(([key, value]) => (
-                  <tr key={key}>
-                    <td>{key}</td>
-                    <td>{value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-    
-          {/* New Sales Pitch Table */}
-          <div className="sales-pitch">
-            <h2>Sales Pitch:</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Feature</th>
-                  <th>Customer Benefit</th>
-                </tr>
-              </thead>
-              <tbody>
-                {product.salesPitch.Feature.map((feature, index) => (
-                  <tr key={index}>
-                    <td className="feature">{feature}</td>
-                    <td className="customer-benefit">{product.salesPitch.Benefit[index]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      <div className="product-container">
+        <Link to="/">
+          <img src="/logo.png" alt="JD Sports Logo" className="logo1" />
+        </Link>
+  
+        <div className="input-container">
+          <input type="text" placeholder="Enter product code" />
+          <button>Go</button>
         </div>
-      );
-    }
-    
-    export default Product;
+  
+        <div className="product-image">
+          <img src={product.image} alt={product.name} />
+        </div>
+  
+        <div className="name-price-container">
+          <h1>{product.name}</h1>
+          <p className="price">{product.price}</p>
+        </div>
+  
+        {/* Product Specifications */}
+        <div className="specifications">
+          <h2>Product Specifications:</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Specification</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(product.specifications).map(([key, value]) => (
+                <tr key={key}>
+                  <td>{key}</td>
+                  <td>{value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+  
+        {/* New Sales Pitch Table */}
+        <div className="sales-pitch">
+          <h2>Sales Pitch:</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Customer Benefit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {product.salesPitch.Feature.map((feature, index) => (
+                <tr key={index}>
+                  <td className="feature">{feature}</td>
+                  <td className="customer-benefit">{product.salesPitch.Benefit[index]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+  
+  export default Product;

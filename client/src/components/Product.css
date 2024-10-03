@@ -183,3 +183,15 @@ button {
   overflow: hidden; /* Hide overflow content */
   text-overflow: ellipsis; /* Add ellipsis (...) for overflowing text */
 }
+
+/* Add media query for larger screens */
+@media screen and (min-width: 445px) {
+  .name-price-container {
+    max-width: 600px; /* Increase the max-width when the screen is larger than 445px */
+  }
+
+  .name-price-container h1,
+  .name-price-container .price {
+    font-size: 20px; /* Slightly increase the font size for larger screens */
+  }
+}
