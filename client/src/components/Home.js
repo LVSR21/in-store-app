@@ -1,14 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Home.css';
 
 function Home() {
   const [productCode, setProductCode] = useState('');
+  const [errorMessages, setErrorMessages] = useState('');
   const navigate = useNavigate();
 
-  const handleGo = () => {
+  const handleGo = async () => {
+    setErrorMessages('');
     if (productCode.trim()) {
-      navigate(`/product/${productCode}`);
+      try {
+        // Make a request to check if the product exists
+        const response = await axios.get(`http://localhost:5000/product/${productCode}`);
+        
+        if (response.data) {
+          // If the product exists, navigate to the product page
+          navigate(`/product/${productCode}`);
+        }
+      } catch (error) {
+        // Handle error (e.g., product not found)
+        if (error.response && error.response.status === 404) {
+          setErrorMessages('Product code not found. Please try again.');
+        } else {
+          console.error("Error fetching product:", error);
+        }
+      }
     }
   };
 
@@ -31,6 +49,7 @@ function Home() {
         />
         <button onClick={handleGo}>Go</button>
       </div>
+      {errorMessages && <p className="error-message">{errorMessages}</p>}
     </div>
   );
 }

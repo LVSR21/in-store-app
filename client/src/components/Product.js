@@ -1,117 +1,202 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useParams, Link } from 'react-router-dom';
+import axios from 'axios';
 import './Product.css';
 
 function Product() {
-    const { code } = useParams(); // This can be removed if not used
+  const [productCode, setProductCode] = useState('');
+  const navigate = useNavigate();
+  const { product_code } = useParams();
+  const [product, setProduct] = useState(null);
   
-    // Hardcoded data for demonstration purposes
-    const product = {
-      name: 'Nike Air Max 95',
-      price: '£175',
-      image: `${process.env.PUBLIC_URL}/images/nike.png`, // Reference the image
-      specifications: {
-        Color: 'Iron Grey with Baltic Blue accents',
-        Exclusivity: 'Only At JD',
-        'Upper Material': 'Mesh, Leather, Textile, Synthetics',
-        'Sole Material': 'Synthetic Sole',
-        Midsole: 'Lightweight foam with Max Air cushioning',
-        Outsole: 'Tough rubber for traction',
-        'Closure Type': 'Lace-up fastening',
-        'Fit Features': 'Padded ankle collar for a locked-in fit',
-        'Comfort Features': 'Max Air cushioning for unbeatable comfort',
-        Branding: 'Signature Swoosh and Air Max branding',
-        'Available at store': 'Yes',
-      },
-      salesPitch: {
-        Feature: [
-          "Exclusive Design",
-          "Upper Material",
-          "Midsole",
-          "Outsole",
-          "Closure Type",
-          "Branding",
-          "Versatile Styling",
-          "Materials",
-          "Comfort Features"
-        ],
-        Benefit: [
-          "This limited-edition colorway is exclusive to JD, making your pair unique and sure to stand out.",
-          "The combination of premium materials ensures long-lasting durability while keeping your feet cool.",
-          "Enjoy the iconic Max Air cushioning technology that provides unbeatable comfort and reduces foot fatigue.",
-          "No need to worry about slipping – the tough rubber outsole offers incredible grip on any surface.",
-          "The lace-up fastening and padded collar provide a secure fit, locking your foot in place for maximum support.",
-          "Show off the classic Nike look with the signature Swoosh and Air Max branding – a symbol of quality and style.",
-          "A versatile design that works with anything – from casual wear to a sporty look. Perfect for every occasion.",
-          "The mix of leather, textile, and synthetics gives you a luxurious feel without compromising durability.",
-          "The Max Air cushioning technology will keep you comfortable throughout the day, no matter where you go."
-        ]
+
+  // Fetch the product by product code
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (product_code) {
+        try {
+          const response = await axios.get(`http://localhost:5000/product/${product_code}`);
+          if (response.data && response.data.trainers) {
+            setProduct(response.data.trainers);
+          } else {
+            navigate('/error'); // Redirect to Error page if product not found
+          }
+        } catch (error) {
+          // Redirect to error page on error
+          if (error.response && error.response.status === 404) {
+            navigate('/error'); // Redirect to Error page if product not found
+          } else {
+            console.error("Error fetching product: ", error);
+            navigate('/error'); // Redirect for any other error
+          }
+        }
       }
     };
 
-    return (
-      <div className="product-container">
-        <Link to="/">
-          <img src="/logo.png" alt="JD Sports Logo" className="logo1" />
-        </Link>
-  
-        <div className="input-container">
-          <input type="text" placeholder="Enter product code" />
-          <button>Go</button>
-        </div>
-  
-        <div className="product-image">
-          <img src={product.image} alt={product.name} />
-        </div>
-  
-        <div className="name-price-container">
-          <h1>{product.name}</h1>
-          <p className="price">{product.price}</p>
-        </div>
-  
-        {/* Product Specifications */}
-        <div className="specifications">
-          <h2>Product Specifications:</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Specification</th>
-                <th>Details</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(product.specifications).map(([key, value]) => (
-                <tr key={key}>
-                  <td>{key}</td>
-                  <td>{value}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-  
-        {/* New Sales Pitch Table */}
-        <div className="sales-pitch">
-          <h2>Sales Pitch:</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Feature</th>
-                <th>Customer Benefit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {product.salesPitch.Feature.map((feature, index) => (
-                <tr key={index}>
-                  <td className="feature">{feature}</td>
-                  <td className="customer-benefit">{product.salesPitch.Benefit[index]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
+    fetchProduct();
+  }, [product_code, navigate]);
+
+  const handleGo = async () => {
+    if (productCode.trim()) {
+      try {
+        const response = await axios.get(`http://localhost:5000/product/${productCode}`);
+        if (response.data && response.data.trainers) {
+          navigate(`/product/${productCode}`);
+        } else {
+          navigate('/error'); // Redirect to Error page if product code is not found
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          navigate('/error'); // Redirect to Error page if product code not found
+        } else {
+          console.error("Error fetching product:", error);
+        }
+      }
+    }
+  };
+
+  if (!product) {
+    return <div>Loading...</div>;
   }
-  
-  export default Product;
+
+  // Render the product details if available
+  return (
+    <div className="product-container">
+      <Link to="/">
+        <img src="/logo.png" alt="JD Sports Logo" className="logo1" />
+      </Link>
+
+      <div className="input-container">
+        <input 
+          type="text" 
+          placeholder="Product-code"
+          value={productCode}
+          onChange={(e) => setProductCode(e.target.value)}
+        />
+        <button onClick={handleGo}>Go</button>
+      </div>
+
+      <div className="product-image">
+        <img src={product.image_URL} alt={product.product_name} />
+      </div>
+
+      <div className="name-price-container">
+        <h1>{product.product_name}</h1>
+        <p className="price">{product.price}</p>
+      </div>
+
+      {/* Product Specifications */}
+      <div className="specifications">
+        <h2>Product Specifications:</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Specification</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Color</td>
+              <td>{product.color}</td>
+            </tr>
+            <tr>
+              <td>Exclusivity</td>
+              <td>{product.exclusivity}</td>
+            </tr>
+            <tr>
+              <td>Upper Material</td>
+              <td>{product.upper_material}</td>
+            </tr>
+            <tr>
+              <td>Sole Material</td>
+              <td>{product.sole_material}</td>
+            </tr>
+            <tr>
+              <td>Midsole</td>
+              <td>{product.midsole}</td>
+            </tr>
+            <tr>
+              <td>Outsole</td>
+              <td>{product.outsole}</td>
+            </tr>
+            <tr>
+              <td>Closure Type</td>
+              <td>{product.closure_type}</td>
+            </tr>
+            <tr>
+              <td>Fit Features</td>
+              <td>{product.fit_features}</td>
+            </tr>
+            <tr>
+              <td>Comfort Features</td>
+              <td>{product.comfort_features}</td>
+            </tr>
+            <tr>
+              <td>Branding</td>
+              <td>{product.branding}</td>
+            </tr>
+            <tr>
+              <td>Available at store</td>
+              <td>{product.available_at_store}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Sales Pitch */}
+      <div className="sales-pitch">
+        <h2>Sales Pitch:</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Customer Benefit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Exclusive Design</td>
+              <td>{product.sales_exclusive_design}</td>
+            </tr>
+            <tr>
+              <td>Upper Material</td>
+              <td>{product.sales_upper_material}</td>
+            </tr>
+            <tr>
+              <td>Midsole</td>
+              <td>{product.sales_midsole}</td>
+            </tr>
+            <tr>
+              <td>Outsole</td>
+              <td>{product.sales_outsole}</td>
+            </tr>
+            <tr>
+              <td>Closure Type</td>
+              <td>{product.sales_closure_type}</td>
+            </tr>
+            <tr>
+              <td>Branding</td>
+              <td>{product.sales_branding}</td>
+            </tr>
+            <tr>
+              <td>Versatile Styling</td>
+              <td>{product.sales_versatile_styling}</td>
+            </tr>
+            <tr>
+              <td>Materials</td>
+              <td>{product.sales_materials}</td>
+            </tr>
+            <tr>
+              <td>Comfort Features</td>
+              <td>{product.sales_comfort_features}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export default Product;
