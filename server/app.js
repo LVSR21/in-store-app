@@ -70,7 +70,7 @@ app.get("/product/:product_code", async (req, res) => {
         // Send a 404 response if the product is not found
           return res.status(404).send("Product not found");
       }
-      
+
       // Send the found product as the response
       res.send(product); // Make sure to send the product data properly
   } catch (err) {

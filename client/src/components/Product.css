@@ -122,6 +122,7 @@ button {
   border: 1px solid #737272; /* Add bottom border for rows */
   font-size: 12px;
   text-align: left; /* Left align header text */
+  min-width: 100px;
 }
 
 .sales-pitch {
