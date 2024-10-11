@@ -1,0 +1,26 @@
+# Create base image
+FROM node:16-alpine
+
+# Setting the User to 'Node' within the Docker Image - best practice to run processes inside Docker container as non-root user for security reasons.
+USER node
+
+# Create current working directory
+RUN mkdir -p /home/node/app
+
+# Setting current working directory
+WORKDIR /home/node/app
+
+# Copy dependencies (packege.json) from the root of 'client' directory to the root of the current working directory ('app')
+COPY --chown=node:node ./package*.json ./
+
+# Install dependencies specified in the 'package.json' inside the container
+RUN npm install
+
+# Copy all the files and fodlders from the root of my 'client' directory to the root of the current working directory ('app')
+COPY --chown=node:node ./ ./
+
+# Define default command to run when the container starts
+CMD ["npm", "start"]
+
+
+# Note: the '--chown=node:node' flag ensures that the files are owned by the 'node' user.

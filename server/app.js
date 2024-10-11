@@ -18,8 +18,7 @@ app.use(cors());
 const port = process.env.PORT;
 const uri = process.env.MONGODB_CONNECTION_STRING;
 
-// Log the MongoDB connection string and collection name
-console.log('MongoDB connection string:', uri);
+// Log the collection name
 console.log('Collection Name:', Trainer.collection.name);
 
 // Connect to MongoDB
