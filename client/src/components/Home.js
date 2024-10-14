@@ -13,7 +13,7 @@ function Home() {
     if (productCode.trim()) {
       try {
         // Make a request to check if the product exists
-        const response = await axios.get(`http://localhost:5000/product/${productCode}`);
+        const response = await axios.get(`/api/product/${productCode}`);
         
         if (response.data) {
           // If the product exists, navigate to the product page
