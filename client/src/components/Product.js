@@ -16,7 +16,7 @@ function Product() {
     const fetchProduct = async () => {
       if (product_code) {
         try {
-          const response = await axios.get(`http://localhost:5000/product/${product_code}`);
+          const response = await axios.get(`/api/product/${product_code}`);
           if (response.data && response.data.trainers) {
             setProduct(response.data.trainers);
           } else {
@@ -40,7 +40,7 @@ function Product() {
   const handleGo = async () => {
     if (productCode.trim()) {
       try {
-        const response = await axios.get(`http://localhost:5000/product/${productCode}`);
+        const response = await axios.get(`/api/product/${productCode}`);
         if (response.data && response.data.trainers) {
           navigate(`/product/${productCode}`);
         } else {
