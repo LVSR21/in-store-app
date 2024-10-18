@@ -1,0 +1,17 @@
+# Create base image
+FROM node:16-alpine
+
+# Create current working directory ('app')
+WORKDIR '/app'
+
+# Copy dependencies (packege.json) from the root of 'server' directory to the root of the current working directory ('app')
+COPY ./package.json ./
+
+# Install dependencies inside the container
+RUN npm install
+
+# Copy all the files and folder from the root of my 'server' directory to the root of the current working directory ('app')
+COPY . .
+
+# Define default command to run when the container starts
+CMD ["npm", "run", "start"]
