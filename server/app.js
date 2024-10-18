@@ -158,4 +158,4 @@ app.listen(port, () => {
   console.log(`Server is listening at http://localhost${port}`);
 });
 
-module.exports = app;
+module.exports = app; // This aims to export the app object for testing purposes (DO NOT REMOVE!)
