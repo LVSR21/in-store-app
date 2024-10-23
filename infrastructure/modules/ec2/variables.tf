@@ -8,10 +8,10 @@ variable "project_name" {
 }
 
 ####################################################
-# Bastion Host EC2 variables
+# ECS EC2 variables
 ####################################################
-variable "instance_type" {
-  description = "EC2 instance type to launch."
+variable "ec2_instance_type" {
+  description = "EC2 instance type for ECS cluster."
   type        = string
   default     = "t2.micro"
 }
@@ -24,23 +24,27 @@ variable "instance_key_pair" {
 
 
 
+
+
 # --------------------------------------------------
 # MODULES OUTPUTS VARIABLES
 # --------------------------------------------------
 
 # --------------------------------------------------
-# Network Module outputs
-# --------------------------------------------------
-variable "id_of_first_public_subnet" {
-  description = "CIDR blocks of the private subnets."
-  type        = string
-}
-
-# --------------------------------------------------
 # Security Group Module outputs
 # --------------------------------------------------
 variable "bastion_security_group_id" {
-  description = "ID of the Bastion Security Group."
+  description = "ID of the Bastion Host Security Group."
+  type        = string
+}
+
+variable "ec2_security_group_id" {
+  description = "ID of the ECS EC2 Instances Security Group."
+  type        = string
+}
+
+variable "alb_security_group_id" {
+  description = "ID of the ALB Security Group."
   type        = string
 }
 

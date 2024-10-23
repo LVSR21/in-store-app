@@ -54,3 +54,12 @@ variable "vpc_id" {
   description = "VPC id."
   type        = string
 }
+
+
+# --------------------------------------------------
+# ALB Module outputs
+# --------------------------------------------------
+variable "in_store_app_cert_arn" {
+  description = "The ARN of the SSL/TLS certificate."
+  type        = string
+}

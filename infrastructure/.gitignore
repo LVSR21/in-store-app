@@ -1,0 +1,8 @@
+# Ignore .tfvars that contains sensitive data such as passwords, private keys and other secrets.
+*.tfvars
+*.tfvars.json
+
+# Ignore Terraform files and directories
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup

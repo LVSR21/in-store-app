@@ -6,22 +6,10 @@ data "aws_availability_zones" "available_zones" {
 }
 
 ####################################################
-# VPC
-####################################################
-resource "aws_vpc" "vpc" {
-  cidr_block           = var.vpc_cidr_block
-  enable_dns_hostnames = var.enable_dns_hostnames
-
-  tags = {
-    Name = "${var.project_name}-vpc"
-  }
-}
-
-####################################################
-# INTERNET GATEWAY
+# Internet Gateway
 ####################################################
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = var.vpc_id
 
   tags = {
     Name = "${var.project_name}-igw"
@@ -29,10 +17,10 @@ resource "aws_internet_gateway" "igw" {
 }
 
 ####################################################
-# PUBLIC SUBNETS
+# Public Subnets
 ####################################################
 resource "aws_subnet" "public_subnets" {
-  vpc_id                  = aws_vpc.vpc.id
+  vpc_id                  = var.vpc_id
   count                   = 2
   cidr_block              = cidrsubnet(var.vpc_cidr_block, 8, count.index)
   availability_zone       = data.aws_availability_zones.available_zones.names[count.index]
@@ -46,10 +34,10 @@ resource "aws_subnet" "public_subnets" {
 }
 
 ####################################################
-# PRIVATE SUBNETS
+# Private Subnets
 ####################################################
 resource "aws_subnet" "private_subnets" {
-  vpc_id                  = aws_vpc.vpc.id
+  vpc_id                  = var.vpc.id
   count                   = 2
   cidr_block              = cidrsubnet(var.vpc_cidr_block, 8, 2 + count.index)
   availability_zone       = data.aws_availability_zones.available_zones.names[count.index]
@@ -62,10 +50,10 @@ resource "aws_subnet" "private_subnets" {
 }
 
 ####################################################
-# PUBLIC ROUTE TABLE
+# Public Route Table
 ####################################################
 resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = var.vpc.id
 
   route {
     cidr_block = var.all_traffic
@@ -78,17 +66,17 @@ resource "aws_route_table" "public_route_table" {
 }
 
 ####################################################
-# Set default route table as PRIVATE ROUTE TABLE
+# Set default route table as Private Route Table
 ####################################################
 resource "aws_default_route_table" "private_route_table" {
-  default_route_table_id = aws_vpc.vpc.default_route_table_id
+  default_route_table_id = var.aws_vpc.default_route_table_id
   tags = {
     Name = "${var.project_name}-private-route-table"
   }
 }
 
 ####################################################
-# PUBLIC TABLE ROUTE ASSOCIATION
+# Public Route Table Association
 ####################################################
 resource "aws_route_table_association" "public_route_table_association" {
   count          = 2
@@ -97,7 +85,7 @@ resource "aws_route_table_association" "public_route_table_association" {
 }
 
 ####################################################
-# PRIVATE TABLE ROUTE ASSOCIATION
+# Private Route Table Association
 ####################################################
 resource "aws_route_table_association" "private_route_table_association" {
   count          = 2

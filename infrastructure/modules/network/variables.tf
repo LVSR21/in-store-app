@@ -30,3 +30,27 @@ variable "all_traffic" {
   type = string
   default = "0.0.0.0/0"
 }
+
+
+
+# --------------------------------------------------
+# MODULES OUTPUTS VARIABLES
+# --------------------------------------------------
+
+# --------------------------------------------------
+# VPC Module outputs
+# --------------------------------------------------
+variable "aws_vpc" {
+  description = "VPC Resource."
+  type        = string
+}
+
+variable "vpc_id" {
+  description = "VPC id."
+  type        = string
+}
+
+variable "vpc_cidr_block" {
+  description = "VPC cidr block."
+  type        = string
+}

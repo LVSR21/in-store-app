@@ -42,6 +42,8 @@ resource "aws_lb_listener" "alb_listener_https" {
   load_balancer_arn = aws_lb.alb.arn
   port              = "443"
   protocol          = "HTTPS"
+  ssl_policy = "ELBSecurityPolicy-2016-08"
+  certificate_arn = var.in_store_app_cert_arn
 
   default_action {
     type             = "forward"
