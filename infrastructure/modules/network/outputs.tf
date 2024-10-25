@@ -28,3 +28,8 @@ output "private_route_table" {
   value       = aws_default_route_table.private_route_table
 }
 
+output "private_route_table_id" {
+  description = "Private Route Table id."
+  value       = aws_default_route_table.private_route_table.id
+}
+

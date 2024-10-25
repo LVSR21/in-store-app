@@ -8,30 +8,6 @@ variable "project_name" {
 }
 
 ####################################################
-# Bastion Host Security Group variables
-####################################################
-variable "bastion_ssh_sg" {
-  description = "SSH Bastion Host Security Group."
-  type        = map(any)
-  default = {
-    "cidr_block"     = "20.223.228.255/32" # My OpenVPN Server Public IP
-    "timeout_delete" = "2m"
-  }
-}
-
-####################################################
-# ECS EC2 Security Group variables
-####################################################
-variable "mongodb_sg" {
-  description = "MongoDB Security Group."
-  type        = map(any)
-  default = {
-    "cidr_block"     = "192.168.248.0/21" # MongoDB VPC CIDR
-    "timeout_delete" = "2m"
-  }
-}
-
-####################################################
 # ALB Security Group variables
 ####################################################
 variable "cloudflare_ip_ranges" {
@@ -82,6 +58,11 @@ variable "all_traffic" {
 # --------------------------------------------------
 variable "vpc_id" {
   description = "VPC id."
+  type        = string
+}
+
+variable "vpc_endpoint_s3" {
+  description = "VPC Endpoint for S3."
   type        = string
 }
 

@@ -48,7 +48,7 @@ terraform {
     }
 
     random = {
-      source  = "hashicorp/random"
+      source  = "hashicorp/random" # Useful to create random suffixes to resource names to avoid conflicts when deploying multiple instances of a resource, such as S3 buckets or security groups
       version = ">= 3.0"
     }
   }

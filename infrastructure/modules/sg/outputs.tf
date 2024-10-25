@@ -13,3 +13,7 @@ output "alb_security_group_id" {
   value       = aws_security_group.alb_security_group.id
 }
 
+output "vpc_endpoints_security_group_id" {
+  description = "ID of the Security Group for VPC Endpoints."
+  value = aws_security_group.vpc_endpoints_security_group.id
+}

@@ -1,7 +1,7 @@
 ##########################################################
 # Get latest Amazon Linux 2 AMI for ECS EC2 Instances
 ##########################################################
-data "aws_ami" "amazon-linux-2" {
+data "aws_ami" "amazon_linux_2" {
   most_recent = true
   owners      = ["amazon"] # This specifies that I want AMIs owned by Amazon.
 
@@ -24,8 +24,8 @@ data "aws_ami" "amazon-linux-2" {
 ##########################################################
 # Launch Template Resource for ECS EC2 Instances
 ##########################################################
-resource "aws_launch_template" "ec2-launch-template" {
-  image_id               = data.aws_ami.amazon-linux-2.id
+resource "aws_launch_template" "ec2_launch_template" {
+  image_id               = data.aws_ami.amazon_linux_2.id
   instance_type          = var.ec2_instance_type
   key_name               = var.instance_key_pair
   user_data              = filebase64("${path.module}/ecs.sh")
@@ -37,7 +37,7 @@ resource "aws_launch_template" "ec2-launch-template" {
   }
 
   iam_instance_profile {
-    name = aws_iam_role.ecsInstanceRole.name # ATTENTION: replace with output from IAM module
+    name = aws_iam_role.ecsInstanceRole.name
   }
 
   monitoring {
@@ -55,4 +55,51 @@ resource "aws_launch_template" "ec2-launch-template" {
   tags = {
     "Name" = "${var.project_name}-ecs-ec2"
   }
+}
+
+################################################################
+# Fetch Predefined IAM Policy for ECS Instance Role
+################################################################
+data "aws_iam_policy" "ecs_instance_role_policy" {
+  arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role" # This is prefefined policy for ECS - please see IAM policies for more details.
+}
+
+
+#################################################################
+# IAM Policy Document for EC2 Instances to Assume Roles in ECS 
+#################################################################
+data "aws_iam_policy_document" "ecs_instance_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+#################################################################
+# IAM Role for ECS EC2 Instances
+#################################################################
+resource "aws_iam_role" "ecs_instance_role" {
+  name               = "ecsInstanceRole"
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.ecs_instance_role_policy.json
+}
+
+#################################################################
+# Attach IAM Policy to ECS EC2 Instances Role
+#################################################################
+resource "aws_iam_role_policy_attachment" "ecs_instance_policy" {
+  role       = aws_iam_role.ecs_instance_role.name
+  policy_arn = data.aws_iam_policy.ecs_instance_role_policy.arn
+}
+
+#################################################################
+# IAM Instance Profile for ECS EC2 Instances
+#################################################################
+resource "aws_iam_instance_profile" "ecs_instance_role_profile" {
+  name = aws_iam_role.ecs_instance_role.name
+  role = aws_iam_role.ecs_instance_role.name
 }

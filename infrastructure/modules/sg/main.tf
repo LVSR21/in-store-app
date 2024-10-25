@@ -10,7 +10,7 @@ resource "aws_security_group" "bastion_security_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.bastion_ssh_sg["cidr_block"]]
+    cidr_blocks = ["20.223.228.255/32"] # My OpenVPN Server Public IP
   }
 
   egress {
@@ -26,7 +26,7 @@ resource "aws_security_group" "bastion_security_group" {
   }
 
   timeouts {
-    delete = var.bastion_ssh_sg["timeout_delete"]
+    delete = "2m"
   }
 
   tags = {
@@ -65,20 +65,20 @@ resource "aws_security_group" "ec2_security_group" {
     security_groups = [aws_security_group.bastion_security_group.id]
   }
 
-  ingress {
-    description      = "Allow inbound traffic from ECS EC2 instances to MongoDB."
-    from_port       = 27017
-    to_port         = 27017
-    protocol        = "tcp"
-    cidr_blocks     = [var.mongodb_sg["cidr_block"]]
-  }
-
   egress {
     description     = "Allow outbound traffic to MongoDB."
     from_port       = 27017
     to_port         = 27017
     protocol        = "tcp"
-    cidr_blocks     = [var.mongodb_sg["cidr_block"]]
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description = "Allow outbound HTTPS traffic to VPC endpoints."
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    security_groups = [aws_security_group.vpc_endpoints_security_group.id]
   }
 
   lifecycle {
@@ -86,7 +86,7 @@ resource "aws_security_group" "ec2_security_group" {
   }
 
   timeouts {
-    delete = var.bastion_ssh_sg["timeout_delete"]
+    delete = "2m"
   }
 
   tags = {
@@ -131,10 +131,70 @@ resource "aws_security_group" "alb_security_group" {
   }
 
   timeouts {
-    delete = var.alb_sg["timeout_delete"]
+    delete = "2m"
   }
 
   tags = {
     Name = "${var.project_name}-alb-sg"
+  }
+}
+
+####################################################
+# Security Group for VPC Endpoints
+####################################################
+resource "aws_security_group" "vpc_endpoints_security_group" {
+  description       = "Allow traffic for VPC Endpoints."
+  vpc_id            = var.vpc_id
+
+  ingress {
+    description     = "Allow inbound traffic from EC2 Instances."
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ec2_security_group.id]
+  }
+
+  egress {
+    description = "Allow traffic to EC2 Instances." # Grant permission to EC2 instances to reach the VPC Endpoints
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    security_groups = [aws_security_group.ec2_security_group.id]
+  }
+
+  egress {
+    description     = "Allow traffic to S3 Gateway Endpoint."
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    prefix_list_ids = [var.vpc_endpoint_s3.prefix_list_id]
+  }
+
+  egress {
+    description     = "Allow traffic to DynamoDB Endpoint."
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    prefix_list_ids = [var.vpc_endpoint_dynamodb.prefix_list_id]
+  }
+
+  egress {
+    description     = "Allow traffic to Interface Endpoints (ECS, ECR, CloudWatch)."
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    self            = true # Allow traffic to other resources using this same security group (in this case VPC Endpoints SG)
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  timeouts {
+    delete = "2m"
+  }
+
+  tags = {
+    Name = "${var.project_name}-vpc-endpoints-sg"
   }
 }

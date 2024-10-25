@@ -17,7 +17,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 ####################################################
-# Public Subnets
+# Public Subnets for ALB
 ####################################################
 resource "aws_subnet" "public_subnets" {
   vpc_id                  = var.vpc_id
@@ -34,7 +34,7 @@ resource "aws_subnet" "public_subnets" {
 }
 
 ####################################################
-# Private Subnets
+# Private Subnets for Containers
 ####################################################
 resource "aws_subnet" "private_subnets" {
   vpc_id                  = var.vpc.id
@@ -66,10 +66,16 @@ resource "aws_route_table" "public_route_table" {
 }
 
 ####################################################
-# Set default route table as Private Route Table
+# Private Route Table
 ####################################################
-resource "aws_default_route_table" "private_route_table" {
-  default_route_table_id = var.aws_vpc.default_route_table_id
+resource "aws_route_table" "private_route_table" {
+  vpc_id = var.vpc.id
+
+route {
+    cidr_block = var.all_traffic
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
   tags = {
     Name = "${var.project_name}-private-route-table"
   }
