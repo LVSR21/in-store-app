@@ -13,7 +13,7 @@ resource "aws_lb" "alb" {
 }
 
 ####################################################
-# ALB HTTP istener
+# ALB HTTP Listener
 ####################################################
 resource "aws_lb_listener" "alb_listener_http" {
   load_balancer_arn = aws_lb.alb.arn

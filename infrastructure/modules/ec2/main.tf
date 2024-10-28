@@ -65,9 +65,9 @@ data "aws_iam_policy" "ecs_instance_role_policy" {
 }
 
 
-#################################################################
-# IAM Policy Document for EC2 Instances to Assume Roles in ECS 
-#################################################################
+#######################################################################
+# Fetch IAM Policy Document for EC2 Instances to Assume Roles in ECS 
+#######################################################################
 data "aws_iam_policy_document" "ecs_instance_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]

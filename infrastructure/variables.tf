@@ -29,6 +29,16 @@ variable "aws_region" {
 
 
 #---------------------------------------
+# MongoDB Connection Sring variable
+#---------------------------------------
+variable "mongodb_connection_string" {
+    description = "MongoDB connection string for the api container."
+    type = string
+    sensitive = true
+}
+
+
+#---------------------------------------
 # CloudFlare API Token variable
 #---------------------------------------
 variable "cloudflare_api_token" {
