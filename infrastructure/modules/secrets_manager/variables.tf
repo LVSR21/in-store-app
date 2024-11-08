@@ -1,17 +1,15 @@
-############################################################
-# MongoDB variables
-############################################################
-variable "mongodb_connection_string" {
-    description = "MongoDB connection string for the api container."
+variable "project_name" {
     type = string
-    sensitive = true
 }
 
-############################################################
-# CloudFlare variables
-############################################################
-variable "cloudflare_api_token" {
-    description = "CloudFlare API token for the nginx container."
+variable "environment" {
     type = string
-    sensitive = true
+}
+
+variable "mongodb_connection_string" {
+    type = string
+}
+
+variable "cloudfront_origin_secret" {
+    type = string
 }

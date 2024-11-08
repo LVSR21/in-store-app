@@ -1,3 +1,6 @@
+# Ignore Terraform plan files
+*.tfplan
+
 # Ignore local .terraform directories
 **/.terraform/*
 

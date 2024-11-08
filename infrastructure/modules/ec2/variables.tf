@@ -1,29 +1,18 @@
-####################################################
-# Project maming variable
-####################################################
 variable "project_name" {
-  description = "Project name."
   type        = string
-  default     = "in-store-app"
 }
 
-####################################################
-# ECS EC2 variables
-####################################################
-variable "ec2_instance_type" {
-  description = "EC2 instance type for ECS cluster."
+variable "environment" {
   type        = string
-  default     = "t2.micro"
+}
+
+variable "ec2_instance_type" {
+  type        = string
 }
 
 variable "instance_key_pair" {
-  description = "EC2 instance key pair name."
   type        = string
-  default     = "in-store-app-key-pair" # Please note that this key pair already exists in my AWS account under 'key pair' section in the eu-west-2 region (London).
 }
-
-
-
 
 
 # --------------------------------------------------
@@ -33,18 +22,15 @@ variable "instance_key_pair" {
 # --------------------------------------------------
 # Security Group Module outputs
 # --------------------------------------------------
-variable "bastion_security_group_id" {
-  description = "ID of the Bastion Host Security Group."
-  type        = string
-}
-
 variable "ec2_security_group_id" {
-  description = "ID of the ECS EC2 Instances Security Group."
+  description = "ID of the EC2 Instances Security Group."
   type        = string
 }
 
-variable "alb_security_group_id" {
-  description = "ID of the ALB Security Group."
+# --------------------------------------------------
+# Secrets Manager Module outputs
+# --------------------------------------------------
+variable "cloudfront_secrets_policy_arn" {
+  description = "The ARN of the CloudFront secret in AWS Secrets Manager."
   type        = string
 }
-

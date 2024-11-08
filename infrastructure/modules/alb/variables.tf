@@ -1,29 +1,18 @@
-####################################################
-# Project maming variable
-####################################################
 variable "project_name" {
-  description = "Project name."
+    type        = string
+}
+
+variable "environment" {
+    type        = string
+}
+
+variable "domain_name" {
   type        = string
-  default     = "in-store-app"
 }
 
-####################################################
-# ALB variables
-####################################################
-variable "load_balancer_internal" {
-  description = "Is load balancer internal facing?"
-  type        = bool
-  default     = false
-}
-
-variable "load_balancer_type" {
-  description = "Load balancer type."
+variable "cloudfront_origin_secret" {
   type        = string
-  default     = "application"
 }
-
-
-
 
 # --------------------------------------------------
 # MODULES OUTPUTS VARIABLES
@@ -37,29 +26,28 @@ variable "alb_security_group_id" {
   type        = string
 }
 
-
 # --------------------------------------------------
 # Netowrk Module outputs
-# --------------------------------------------------
-variable "public_subnets" {
-  description = "List of public subnets."
-  type        = set(string)
-}
-
-
-# --------------------------------------------------
-# VPC Module outputs
 # --------------------------------------------------
 variable "vpc_id" {
   description = "VPC id."
   type        = string
 }
 
+variable "public_subnet_ids" {
+  description = "List of public subnet IDs."
+  type        = list(string)
+}
 
 # --------------------------------------------------
-# ALB Module outputs
+# Route 53 Module outputs
 # --------------------------------------------------
-variable "in_store_app_cert_arn" {
-  description = "The ARN of the SSL/TLS certificate."
-  type        = string
+variable "certificate_validation_records" {
+  description = "The certificate validation records."
+  type        = list(object({
+    name    = string
+    type    = string
+    value   = string
+  }))
 }
+

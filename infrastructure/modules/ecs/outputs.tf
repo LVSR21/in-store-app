@@ -1,9 +1,4 @@
-output "alb_target_group_arn" {
-    description = "ALB Target Group ARN."
-    value = aws_lb_target_group.alb_target_group.arn
-}
-
-output "ecr_repository_url" {
-    description = "ECR repository URL."
-    value = data.aws_ecr_repository.repo.repository_url
+output "ecs_service_name" {
+    description = "ECS Service Name."
+    value = aws_ecs_service.ecs_service.name
 }
