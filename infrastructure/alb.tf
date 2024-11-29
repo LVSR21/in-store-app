@@ -61,7 +61,7 @@ resource "aws_alb_listener_rule" "https_listener_rule" {
   condition {
     http_header {
       http_header_name = "X-Custom-Header"
-      values           = [var.custom_origin_host_header]
+      values           = [data.aws_secretsmanager_secret_version.cloudfront.secret_string] # Because I need the actual secret value to set it as custom header I need to use '.secret_string' to directly access the secret value stored in AWS Secrets Manager.
     }
   }
 

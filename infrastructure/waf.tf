@@ -1,6 +1,7 @@
 resource "aws_wafv2_web_acl" "cloudfront_waf" {
   name        = "${var.namespace}-waf-${var.environment}"
   description = "WAF Web ACL with security rules"
+  provider    = aws.us_east_1
   scope       = "CLOUDFRONT"
 
   default_action {

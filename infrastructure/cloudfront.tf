@@ -31,7 +31,7 @@ resource "aws_cloudfront_distribution" "default" {
 
     custom_header {
       name  = "X-Custom-Header"
-      value = var.custom_origin_host_header
+      value = data.aws_secretsmanager_secret_version.cloudfront.secret_string # Because I need the actual secret value to set it as custom header I need to use '.secret_string' to directly access the secret value stored in AWS Secrets Manager.
     }
 
     custom_origin_config {

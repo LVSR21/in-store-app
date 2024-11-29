@@ -21,7 +21,7 @@ variable "scenario" {
 }
 
 variable "environment" {
-  description = "Environment for deployment (like dev or staging)"
+  description = "Environment for deployment"
   default     = "dev"
   type        = string
 }

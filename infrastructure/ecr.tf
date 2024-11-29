@@ -3,7 +3,7 @@
 ########################################################
 
 data "aws_ecr_repository" "ecr_repo" {
-  name = "my-repo"
+  name = "jd-repo"
 }
 
 
