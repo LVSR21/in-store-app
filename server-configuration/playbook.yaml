@@ -1,0 +1,16 @@
+---
+- name: Configure ECS Instances
+  hosts: tag_Role_ecs_instance  # This comes from terraform launch template for ECS instances and inventory dynamic plugin file
+  become: true # Run tasks as root on the instances
+  tasks:
+    - name: Update and upgrade all packages
+      ansible.builtin.yum:
+        name: "*"
+        state: latest
+        update_cache: yes  # Refreshes package cache first
+        update_only: no    # Allows both update and upgrade operations
+    
+    - name: Create test file
+      ansible.builtin.copy:
+        content: "Ansible test successful!\nHost: {{ ansible_hostname }}" # The {{ ansible_hostname }} is an Ansible variable that automatically contains the hostname of the target machine where the playbook is running. It's using Jinja2 template syntax (the double curly braces).
+        dest: /home/ec2-user/ansible_test
