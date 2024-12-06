@@ -39,7 +39,12 @@ resource "aws_ecs_service" "service" {
     ignore_changes = [desired_count]
   }
 
-  depends_on = [aws_alb_listener.alb_default_listener_https]
+  depends_on = [
+    aws_alb.alb,
+    aws_alb_listener.alb_default_listener_https,
+    aws_alb_listener_rule.https_listener_rule,
+    aws_alb_target_group.service_target_group
+    ]
 
   tags = {
     Scenario = var.scenario

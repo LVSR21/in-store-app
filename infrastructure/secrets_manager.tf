@@ -22,8 +22,8 @@ resource "aws_secretsmanager_secret_version" "mongodb" {
 # Data source to read the MongoDB secret value
 ############################################################
 data "aws_secretsmanager_secret_version" "mongodb" {
-  secret_id = aws_secretsmanager_secret.mongodb.id
-  depends_on = [ aws_secretsmanager_secret_version.mongodb ]
+  secret_id  = aws_secretsmanager_secret.mongodb.id
+  depends_on = [aws_secretsmanager_secret_version.mongodb]
 }
 
 ############################################################
@@ -75,6 +75,7 @@ resource "aws_secretsmanager_secret_version" "cloudfront" {
 ############################################################
 data "aws_secretsmanager_secret_version" "cloudfront" {
   secret_id = aws_secretsmanager_secret.cloudfront.id
+  depends_on = [aws_secretsmanager_secret.cloudfront]
 }
 
 ##############################################################################

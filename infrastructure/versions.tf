@@ -1,9 +1,5 @@
 terraform {
   # Backend configuration using S3 bucket and DynamoDB Table for remote state storage.
-
-  # Backend must remain commented until the S3 bucket and the DynamoDB table are created.
-  # After the creation we can uncomment it, run "terraform init" and then "terraform apply"
-
   backend "s3" {
     bucket         = "in-store-app-terraform-state-backend"
     key            = "infrastructure/modules/remote_backend/terraform.tfstate"

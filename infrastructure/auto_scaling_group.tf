@@ -46,4 +46,16 @@ resource "aws_autoscaling_group" "ecs_autoscaling_group" {
     propagate_at_launch = false
     value               = var.scenario
   }
+
+  tag {
+    key                 = "Environment"
+    value               = var.environment
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Role"
+    value               = "ecs-instance"
+    propagate_at_launch = true
+  }
 }

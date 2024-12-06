@@ -2,7 +2,9 @@
 ## This resource returns a list of all AZ available in the region configured in the AWS credentials
 ########################################################################################################################
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+  state = "available"
+}
 
 ########################################################################################################################
 ## Public Subnets (one public subnet per AZ)
@@ -69,6 +71,7 @@ resource "aws_eip" "nat_gateway" {
   tags = {
     Name     = "${var.namespace}_EIP_${count.index}_${var.environment}"
     Scenario = var.scenario
+    Environment = var.environment
   }
 }
 
@@ -84,6 +87,7 @@ resource "aws_nat_gateway" "nat_gateway" {
   tags = {
     Name     = "${var.namespace}_NATGateway_${count.index}_${var.environment}"
     Scenario = var.scenario
+    Environment = var.environment
   }
 }
 
@@ -130,4 +134,17 @@ resource "aws_route_table_association" "private" {
   count          = var.az_count
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[count.index].id
+}
+
+
+
+
+output "private_subnet_cidr_blocks" {
+  description = "List of private subnet CIDR blocks"
+  value       = aws_subnet.private[*].cidr_block
+}
+
+output "azs" {
+  description = "List of availability zones available in the region"
+  value       = data.aws_availability_zones.available.names # This fetches available AZs dynamically
 }

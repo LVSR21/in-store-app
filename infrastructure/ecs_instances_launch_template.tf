@@ -44,14 +44,21 @@ resource "aws_launch_template" "ecs_launch_template" {
   }
 
   tags = {
-    Scenario = var.scenario
+    Name        = "ecs-instance-${var.environment}"
+    Scenario    = var.scenario
+    Environment = var.environment
+    Role        = "ecs-instance"
   }
 }
+
+
+
 
 data "template_file" "user_data" {
   template = file("user_data.sh")
 
   vars = {
-    ecs_cluster_name = aws_ecs_cluster.default.name
+    ecs_cluster_name           = aws_ecs_cluster.default.name
+    private_subnet_cidr_blocks = join(" ", aws_subnet.private[*].cidr_block) # Need this variable to pass it to my 'user_data.sh' script file - this will contain the list of private subnet CIDR blocks needed for the Nmap scan.
   }
 }
