@@ -54,7 +54,7 @@ jobs:
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -63,7 +63,7 @@ jobs:
       # Authenticate with ECR
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
       
       # Generate version number
       - name: Generate version number
@@ -72,21 +72,21 @@ jobs:
 
       # Build and push images to ECR
       - name: Build and push nginx image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: ./nginx
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:in-store-app-nginx-${{ env.VERSION }}
           push: true
 
       - name: Build and push client image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: ./client
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:in-store-app-client-${{ env.VERSION }}
           push: true
 
       - name: Build and push api image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: ./server
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:in-store-app-api-${{ env.VERSION }}
