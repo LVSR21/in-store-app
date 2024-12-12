@@ -94,7 +94,7 @@ jobs:
           
       # Deploy infrastructure with Terraform
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.3.0
           
@@ -112,5 +112,5 @@ jobs:
         working-directory: ./infrastructure
         env:
           TF_VAR_image_version: ${{ env.VERSION }}
-        run: terraform apply myplan.tfplan -auto-approve
+        run: terraform apply myplan.tfplan
         
