@@ -38,7 +38,7 @@ jobs:
       - name: Run Server Tests
         working-directory: ./server
         env:
-          uri: ${{ secrets.MONGODB_CONNECTION_STRING }}
+          NODE_ENV: test
         run: npm test
 
   # Step 2-8: Build and deploy

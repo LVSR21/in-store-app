@@ -1,4 +1,21 @@
-// Import dependencies
+// Mock mongoose
+jest.mock('mongoose', () => {
+  const actualMongoose = jest.requireActual('mongoose');
+  return {
+    ...actualMongoose,
+    connect: jest.fn(),
+    disconnect: jest.fn(),
+    connection: {
+      once: jest.fn(),
+      on: jest.fn(),
+      db: {
+        databaseName: 'testdb',
+      },
+    },
+  };
+});
+
+// Import dependencies after mocking
 const request = require('supertest');
 const mongoose = require('mongoose'); // Import mongoose to manage connection
 const app = require('./app'); // Adjust the path as necessary

@@ -18,6 +18,16 @@ app.use(cors());
 const port = process.env.PORT;
 const uri = process.env.MONGODB_CONNECTION_STRING;
 
+// Only connect to MongoDB if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  const uri = process.env.MONGODB_CONNECTION_STRING;
+
+  // Ensure uri is defined
+  if (!uri) {
+    console.error('MONGODB_CONNECTION_STRING is not defined');
+    process.exit(1);
+  }
+
 // Log the collection name
 console.log('Collection Name:', Trainer.collection.name);
 
@@ -37,6 +47,7 @@ connection.once('open', () => {
 connection.on('error', () => {
     console.error('MongoDB connection failed');
 });
+}
 
 // 1. GET all products
 app.get("/allproducts", async (req, res) => {
