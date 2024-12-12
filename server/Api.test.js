@@ -30,11 +30,12 @@ beforeAll(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
 });
 
-afterAll(() => {
+afterAll(async() => {
     console.log.mockRestore();
     console.error.mockRestore();
-    // Disconnect from MongoDB
-    return mongoose.disconnect(); // Ensure that the mongoose connection is closed
+    jest.clearAllMocks();
+    // Close the mongoose connection
+    await mongoose.disconnect();
 });
 
 describe('Product API', () => {

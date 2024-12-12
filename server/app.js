@@ -1,9 +1,9 @@
 // Import dependencies and model
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Trainer = require('./model/product');
-require('dotenv').config();
 
 // Create Express app
 const app = express();
