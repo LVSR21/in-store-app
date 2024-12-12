@@ -3,7 +3,7 @@ name: Build and Deploy in-store-app
 on:
   push:
     branches:
-      - main
+      - production
 
 env:
   AWS_REGION: eu-west-2
