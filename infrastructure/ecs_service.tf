@@ -44,13 +44,13 @@ resource "aws_ecs_service" "service" {
     aws_alb_listener.alb_default_listener_https,
     aws_alb_listener_rule.https_listener_rule,
     aws_alb_target_group.service_target_group
-    ]
+  ]
 
   tags = {
     Scenario = var.scenario
   }
 }
 
-output "ecs_service_name" {
-  value = aws_ecs_service.service.name
-}
+# output "ecs_service_name" {
+#   value = aws_ecs_service.service.name
+# }

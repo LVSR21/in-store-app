@@ -8,11 +8,19 @@ resource "aws_security_group" "bastion_host" {
   vpc_id      = aws_vpc.default.id
 
   ingress {
-    description = "Allow SSH"
+    description = "Allow SSH from trusted IP"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["20.223.228.255/32"] # This is the Server Public IP of my OpenVPN
+  }
+
+  egress {
+    description     = "Allow SSH to EC2 instances"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    cidr_blocks     = [var.vpc_cidr_block]
   }
 
   egress {

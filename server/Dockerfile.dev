@@ -4,7 +4,7 @@ FROM node:16-alpine
 # Create current working directory ('app')
 WORKDIR '/app'
 
-# Copy dependencies (packege.json) from the root of 'server' directory to the root of the current working directory ('app')
+# Copy dependencies (package.json) from the root of 'server' directory to the root of the current working directory ('app')
 COPY ./package.json ./
 
 # Install dependencies inside the container

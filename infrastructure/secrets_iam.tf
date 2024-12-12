@@ -10,7 +10,7 @@ resource "aws_iam_policy" "secrets_policy" {
           "secretsmanager:GetSecretValue"
         ]
         Resource = [
-          "arn:aws:secretsmanager:eu-west-2:344615752961:secret:jd-mongodb-connection-string-dev-*"
+          "arn:aws:secretsmanager:eu-west-2:344615752961:secret:jd-mongodb-connection-string-prod-*"
         ]
       }
     ]
@@ -19,6 +19,6 @@ resource "aws_iam_policy" "secrets_policy" {
 
 # Attach policy to the task execution role
 resource "aws_iam_role_policy_attachment" "secrets_policy_attachment" {
-  role       = "jd_ECS_TaskExecutionRole_dev"
+  role       = "jd_ECS_TaskExecutionRole_prod"
   policy_arn = aws_iam_policy.secrets_policy.arn
 }

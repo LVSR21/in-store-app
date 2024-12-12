@@ -16,12 +16,44 @@ resource "aws_security_group" "ec2" {
   }
 
   ingress {
-    description     = "Allow SSH ingress traffic from bastion host"
+    description     = "Allow HTTP traffic from ALB on port 80 - Nginx"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+
+  ingress {
+    description     = "Allow traffic from ALB on port 3000 - Client"
+    from_port       = 3000
+    to_port         = 3000
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+
+  ingress {
+    description     = "Allow traffic from ALB on port 5000 - Server/Api"
+    from_port       = 5000
+    to_port         = 5000
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+
+  ingress {
+    description     = "Allow SSH from Bastion host"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
     security_groups = [aws_security_group.bastion_host.id]
   }
+
+  ingress {
+    description     = "Allow all traffic between containers/services within the same security group"
+    from_port       = 0
+    to_port         = 65535
+    protocol        = "tcp"
+    self            = true  # Allows traffic between resources with this security group
+}
 
   egress {
     description = "Allow all egress traffic"

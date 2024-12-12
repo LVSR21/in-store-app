@@ -74,8 +74,8 @@ resource "aws_secretsmanager_secret_version" "cloudfront" {
 # Data source to read the CloudFront secret value
 ############################################################
 data "aws_secretsmanager_secret_version" "cloudfront" {
-  secret_id = aws_secretsmanager_secret.cloudfront.id
-  depends_on = [aws_secretsmanager_secret.cloudfront]
+  secret_id  = aws_secretsmanager_secret.cloudfront.id
+  depends_on = [aws_secretsmanager_secret_version.cloudfront]
 }
 
 ##############################################################################

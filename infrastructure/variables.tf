@@ -22,7 +22,7 @@ variable "scenario" {
 
 variable "environment" {
   description = "Environment for deployment"
-  default     = "dev"
+  default     = "prod"
   type        = string
 }
 
@@ -98,6 +98,10 @@ variable "instance_key_pair" {
 ########################################################################################################################
 ## ECS variables
 ########################################################################################################################
+variable "image_version" {
+  description = "Version tag for container images"
+  type        = string
+}
 
 variable "ecs_task_desired_count" {
   description = "How many ECS tasks should run in parallel"

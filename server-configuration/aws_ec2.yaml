@@ -6,6 +6,6 @@ keyed_groups: # Creates dynamic groups based on EC2 instance tags. Instances tag
     prefix: tag_Role # Group names will be prefixed with "tag_Role_"
 filters: # Filters which EC2 instances to include:
   instance-state-name: running # - Only includes running instances
-  tag:Environment: dev # - Only includes instances tagged with Environment=dev
+  tag:Environment: prod # - Only includes instances tagged with Environment=prod
 compose: # Sets variables for each host
   ansible_host: private_ip_address # Maps the private IP address to ansible_host variable. This tells Ansible which IP to use when connecting.
