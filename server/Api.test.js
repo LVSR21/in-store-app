@@ -5,6 +5,14 @@ const app = require('./app'); // Adjust the path as necessary
 const Trainer = require('./model/product'); // Mongoose model
 
 // At the top of Api.test.js
+jest.mock('./model/product', () => ({
+  collection: {
+    name: 'trainers'  // Mock the collection name
+  },
+  findOne: jest.fn(),
+  mockImplementation: jest.fn()
+}));
+
 jest.mock('mongoose', () => {
   const mockedSchema = jest.fn().mockReturnValue({});
   mockedSchema.Types = {
