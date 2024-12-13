@@ -4,13 +4,26 @@ const mongoose = require('mongoose'); // Import mongoose to manage connection
 const app = require('./app'); // Adjust the path as necessary
 const Trainer = require('./model/product'); // Mongoose model
 
-// Mock the Trainer model methods
-jest.mock('./model/product'); // This will mock all methods in the Trainer model
+// At the top, after your imports
+jest.mock('mongoose', () => ({
+  connect: jest.fn(),
+  connection: {
+    once: jest.fn(),
+    on: jest.fn(),
+    db: { collection: jest.fn() }
+  },
+  model: jest.fn(),
+  disconnect: jest.fn()
+}));
 
-// Suppress console.log and console.error
+// Replace your existing beforeAll with this
 beforeAll(() => {
-    jest.spyOn(console, 'log').mockImplementation(() => {});
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+  // Mock successful connection
+  mongoose.connect.mockResolvedValue();
+  
+  // Keep your console mocks
+  jest.spyOn(console, 'log').mockImplementation(() => {});
+  jest.spyOn(console, 'error').mockImplementation(() => {});
 });
 
 afterAll(() => {
