@@ -102,6 +102,7 @@ jobs:
         working-directory: ./infrastructure
         env:
           TF_VAR_image_version: ${{ env.VERSION }}
+          TF_VAR_mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}
         run: terraform init
           
       - name: Terraform Plan
@@ -109,7 +110,7 @@ jobs:
         env:
           TF_VAR_image_version: ${{ env.VERSION }}
           TF_VAR_mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}
-        run: terraform plan -out=myplan.tfplan -var "image_version=${{ env.VERSION }}"
+        run: terraform plan -out=myplan.tfplan
 
       - name: Terraform Apply
         working-directory: ./infrastructure
