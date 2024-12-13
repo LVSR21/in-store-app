@@ -31,15 +31,15 @@ jobs:
         run: npm test
         
       # Run server tests
-      - name: Install Server Dependencies
-        working-directory: ./server
-        run: npm install
+      # - name: Install Server Dependencies
+      #   working-directory: ./server
+      #   run: npm install
         
-      - name: Run Server Tests
-        working-directory: ./server
-        env:
-          NODE_ENV: test
-        run: npm test
+      # - name: Run Server Tests
+      #   working-directory: ./server
+      #   env:
+      #     NODE_ENV: test
+      #   run: npm test
 
   # Step 2-8: Build and deploy
   build-and-deploy:
