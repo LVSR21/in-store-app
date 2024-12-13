@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 // Connect to MongoDB
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 const uri = process.env.MONGODB_CONNECTION_STRING;
 
 // Log the collection name
@@ -155,7 +155,7 @@ app.delete("/product/:product_code", async (req, res) => {
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
-  console.log(`Server is listening at http://localhost${port}`);
+  console.log(`Server is listening at http://localhost:${port}`);
 });
 
 module.exports = app; // This aims to export the app object for testing purposes (DO NOT REMOVE!)
