@@ -1,21 +1,4 @@
-// Mock mongoose
-jest.mock('mongoose', () => {
-  const actualMongoose = jest.requireActual('mongoose');
-  return {
-    ...actualMongoose,
-    connect: jest.fn(),
-    disconnect: jest.fn(),
-    connection: {
-      once: jest.fn(),
-      on: jest.fn(),
-      db: {
-        databaseName: 'testdb',
-      },
-    },
-  };
-});
-
-// Import dependencies after mocking
+// Import dependencies
 const request = require('supertest');
 const mongoose = require('mongoose'); // Import mongoose to manage connection
 const app = require('./app'); // Adjust the path as necessary
@@ -30,12 +13,11 @@ beforeAll(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
 });
 
-afterAll(async() => {
+afterAll(() => {
     console.log.mockRestore();
     console.error.mockRestore();
-    jest.clearAllMocks();
-    // Close the mongoose connection
-    await mongoose.disconnect();
+    // Disconnect from MongoDB
+    return mongoose.disconnect(); // Ensure that the mongoose connection is closed
 });
 
 describe('Product API', () => {
