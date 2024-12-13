@@ -1,9 +1,9 @@
 // Import dependencies and model
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Trainer = require('./model/product');
+require('dotenv').config();
 
 // Create Express app
 const app = express();
@@ -17,16 +17,6 @@ app.use(cors());
 // Connect to MongoDB
 const port = process.env.PORT;
 const uri = process.env.MONGODB_CONNECTION_STRING;
-
-// Only connect to MongoDB if not in test environment
-if (process.env.NODE_ENV !== 'test') {
-  const uri = process.env.MONGODB_CONNECTION_STRING;
-
-  // Ensure uri is defined
-  if (!uri) {
-    console.error('MONGODB_CONNECTION_STRING is not defined');
-    process.exit(1);
-  }
 
 // Log the collection name
 console.log('Collection Name:', Trainer.collection.name);
@@ -47,7 +37,6 @@ connection.once('open', () => {
 connection.on('error', () => {
     console.error('MongoDB connection failed');
 });
-}
 
 // 1. GET all products
 app.get("/allproducts", async (req, res) => {
@@ -66,12 +55,7 @@ app.get("/allproducts", async (req, res) => {
       }
 });
 
-// 2. GET API Health Check
-app.get("/api/health", (req, res) => {
-  res.status(200).send("OK");
-});
-
-// 3. GET a product by product code
+// 2. GET a product by product code
 app.get("/product/:product_code", async (req, res) => {
   try {
     // Extract the product code from the request parameters
@@ -96,7 +80,7 @@ app.get("/product/:product_code", async (req, res) => {
   }
 });
 
-// 4. POST to add a new product
+// 3. POST to add a new product
 app.post("/product", async (req, res) => {
   try {
     // Create a new product instance with the request body
@@ -116,7 +100,7 @@ app.post("/product", async (req, res) => {
   }
 });
 
-// 5. PUT to update a product by product code
+// 4. PUT to update a product by product code
 app.put("/product/:product_code", async (req, res) => {
   try {
     // Extract the product code from the request parameters
@@ -145,7 +129,7 @@ app.put("/product/:product_code", async (req, res) => {
   }
 });
 
-// 6. DELETE a product by product code
+// 5. DELETE a product by product code
 app.delete("/product/:product_code", async (req, res) => {
   try {
     // Extract the product code from the request parameters
@@ -171,7 +155,7 @@ app.delete("/product/:product_code", async (req, res) => {
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
-  console.log(`Server is listening at http://localhost:${port}`);
+  console.log(`Server is listening at http://localhost${port}`);
 });
 
 module.exports = app; // This aims to export the app object for testing purposes (DO NOT REMOVE!)
