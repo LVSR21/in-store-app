@@ -88,7 +88,7 @@ resource "aws_ecs_task_definition" "default" {
       ]
       secrets = [
         {
-          name      = "mongodb_connection_string"
+          name      = "MONGODB_CONNECTION_STRING"
           valueFrom = aws_secretsmanager_secret.mongodb.arn # In here I use the 'arn' of the secret because ECS retrieve the secret value at runtime. The ARN is used to reference the secret in AWS Secrets Manager and ECS handles fetching the actual secret value securely.
         }
       ]
