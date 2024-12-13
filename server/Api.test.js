@@ -5,33 +5,44 @@ const app = require('./app'); // Adjust the path as necessary
 const Trainer = require('./model/product'); // Mongoose model
 
 // At the top of Api.test.js
-jest.mock('./model/product', () => ({
-  collection: {
-    name: 'trainers'  // Mock the collection name
-  },
-  findOne: jest.fn(),
-  mockImplementation: jest.fn()
-}));
-
-jest.mock('mongoose', () => {
-  const mockedSchema = jest.fn().mockReturnValue({});
-  mockedSchema.Types = {
-    ObjectId: jest.fn(),
-    String: String,
-    Number: Number,
-  };
-
+jest.mock('./model/product', () => {
   return {
-    connect: jest.fn(),
-    connection: {
-      once: jest.fn(),
-      on: jest.fn(),
-      db: { collection: jest.fn() }
+    collection: {
+      name: 'trainers'
     },
-    Schema: mockedSchema,
-    model: jest.fn(),
-    disconnect: jest.fn()
+    findOne: jest.fn(),
+    mockImplementation: jest.fn(),
+    // Add constructor function for new instances
+    prototype: {
+      save: jest.fn().mockResolvedValue({
+        product_code: '123',
+        product_name: 'New Product'
+      })
+    }
   };
+});
+
+// Update your test case
+it('should add a new product', async () => {
+  const productData = {
+    product_code: '123',
+    product_name: 'New Product'
+  };
+
+  // Mock the constructor behavior
+  const mockSave = jest.fn().mockResolvedValue(productData);
+  Trainer.mockImplementation(() => ({
+    ...productData,
+    save: mockSave
+  }));
+
+  const res = await request(app)
+    .post('/product')
+    .send(productData);
+
+  expect(res.statusCode).toBe(201);
+  expect(res.body.product_code).toBe('123');
+  expect(mockSave).toHaveBeenCalled();
 });
 
 // Keep your existing mock for the product model
