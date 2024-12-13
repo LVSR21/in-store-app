@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const Trainer = require('./model/product');
 
+// Store server instance
+let server;
+
 // Mock mongoose
 jest.mock('mongoose', () => ({
   connect: jest.fn().mockResolvedValue({}),
@@ -36,16 +39,19 @@ jest.mock('./model/product', () => {
 });
 
 // Test setup
-beforeAll(() => {
+beforeAll(async () => {
   jest.spyOn(console, 'log').mockImplementation(() => {});
   jest.spyOn(console, 'error').mockImplementation(() => {});
+  server = app.listen();
 });
 
-afterAll(done => {
+afterAll(async () => {
+  await new Promise(resolve => {
+    server.close(resolve);
+  });
   console.log.mockRestore();
   console.error.mockRestore();
-  mongoose.disconnect();
-  done();
+  await mongoose.disconnect();
 });
 
 describe('Product API', () => {
