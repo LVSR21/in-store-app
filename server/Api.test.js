@@ -4,17 +4,30 @@ const mongoose = require('mongoose'); // Import mongoose to manage connection
 const app = require('./app'); // Adjust the path as necessary
 const Trainer = require('./model/product'); // Mongoose model
 
-// At the top, after your imports
-jest.mock('mongoose', () => ({
-  connect: jest.fn(),
-  connection: {
-    once: jest.fn(),
-    on: jest.fn(),
-    db: { collection: jest.fn() }
-  },
-  model: jest.fn(),
-  disconnect: jest.fn()
-}));
+// At the top of Api.test.js
+jest.mock('mongoose', () => {
+  const mockedSchema = jest.fn().mockReturnValue({});
+  mockedSchema.Types = {
+    ObjectId: jest.fn(),
+    String: String,
+    Number: Number,
+  };
+
+  return {
+    connect: jest.fn(),
+    connection: {
+      once: jest.fn(),
+      on: jest.fn(),
+      db: { collection: jest.fn() }
+    },
+    Schema: mockedSchema,
+    model: jest.fn(),
+    disconnect: jest.fn()
+  };
+});
+
+// Keep your existing mock for the product model
+jest.mock('./model/product');
 
 // Replace your existing beforeAll with this
 beforeAll(() => {
