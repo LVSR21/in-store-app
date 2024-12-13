@@ -13,7 +13,8 @@ resource "aws_ecs_task_definition" "default" {
   container_definitions = jsonencode([
     {
       name      = "nginx"
-      image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-nginx-${var.image_version}" # My nginx image - image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-nginx"
+      # image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-nginx-${var.image_version}" # My nginx image
+      image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-nginx"
       cpu       = 256                                                                     # 0.25 vCPU
       memory    = 1024                                                                    # 1 GiB for nginx
       essential = true
@@ -36,7 +37,8 @@ resource "aws_ecs_task_definition" "default" {
     },
     {
       name      = "client"
-      image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-client-${var.image_version}" # My client image - image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-client"
+      # image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-client-${var.image_version}" # My client image
+      image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-client"
       cpu       = var.cpu_units
       memory    = var.memory
       essential = true
@@ -63,7 +65,8 @@ resource "aws_ecs_task_definition" "default" {
     },
     {
       name      = "api"                                                                 # From Docker-Compose file
-      image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-api-${var.image_version}" # My api image - image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-api"
+      # image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-api-${var.image_version}" # My api image
+      image     = "${data.aws_ecr_repository.ecr_repo.repository_url}:in-store-app-api"
       cpu       = var.cpu_units
       memory    = var.memory
       essential = true

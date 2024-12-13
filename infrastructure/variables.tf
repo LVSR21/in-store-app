@@ -30,15 +30,15 @@ variable "environment" {
 ## AWS credentials
 ########################################################################################################################
 
-# variable "aws_access_key_id" {
-#   description = "AWS console access key"
-#   type        = string
-# }
+variable "aws_access_key_id" { #Comment out for GiThUB aCTIONS
+  description = "AWS console access key"
+  type        = string
+}
 
-# variable "aws_secret_access_key" {
-#   description = "AWS console secret access key"
-#   type        = string
-# }
+variable "aws_secret_access_key" { #Comment out for GiThUB aCTIONS
+  description = "AWS console secret access key"
+  type        = string
+}
 
 variable "region" {
   description = "AWS region"
@@ -98,10 +98,10 @@ variable "instance_key_pair" {
 ########################################################################################################################
 ## ECS variables
 ########################################################################################################################
-variable "image_version" {
-  description = "Version tag for container images"
-  type        = string
-}
+# variable "image_version" {
+#   description = "Version tag for container images"
+#   type        = string
+# }
 
 variable "ecs_task_desired_count" {
   description = "How many ECS tasks should run in parallel"
