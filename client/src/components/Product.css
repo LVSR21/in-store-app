@@ -1,0 +1,198 @@
+/* Product.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+body {
+  background-color: black; /* Set the desired background color */
+  margin: 0; /* Remove any default margin */
+  height: 100%; /* Ensure the body takes full height */
+}
+
+/* Other styles... */
+.product-container {
+  background-color: black; /* Background color for the page */
+  color: white; /* Text color */
+  height: 100vh; /* Full height of the viewport */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: flex-start; /* Align to the start */
+  align-items: center; /* Center align horizontally */
+  font-family: 'Roboto', sans-serif; /* Use Roboto font */
+  padding: 20px; /* Padding around the content */
+}
+
+.logo1 {
+  width: 100px;
+  margin-top: -10px;
+}
+
+.input-container {
+  display: flex;
+  margin-bottom: 20px; /* Space below the input container */
+}
+
+input {
+  padding: 10px;
+  border: 2px solid yellow; /* Border color */
+  background-color: black;
+  color: white;
+  margin-right: 10px; /* Space between input and button */
+  font-family: 'Roboto', sans-serif; /* Use Roboto font */
+  text-align: center; /* Center text in input */
+  border-radius: 25px; /* Round corners */
+}
+
+button {
+  padding: 10px 20px;
+  background-color: black; /* Button background */
+  border: 2px solid yellow; /* Button border */
+  color: yellow; /* Button text color */
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif; /* Use Roboto font */
+  border-radius: 25px; /* Round corners */
+}
+
+.product-image img {
+  max-width: 100%; /* Make the image responsive */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 5%; /* This will make the corners rounded */
+}
+
+.name-price-container {
+  display: flex;
+  justify-content: space-between; /* Push name to the left and price to the right */
+  width: 100%; /* Make sure it takes full width */
+  max-width: 400px; /* Optional: set a max width if needed */
+  margin-top: 10px; /* Space between image and text */
+  padding: 0 10px; /* Optional: add some padding to the sides */
+}
+
+.name-price-container h1,
+.name-price-container .price {
+  font-size: 18px;
+  font-family: 'Roboto', sans-serif; /* Set Roboto as the default font */
+  margin: 0;
+  font-weight: bold;
+}
+
+/* Center and style the specifications */
+.specifications {
+  text-align: center;
+  width: 100%; /* Make sure it takes full width */
+  max-width: 600px; /* Set a max-width to keep it neat */
+  margin-top: 20px; /* Add margin above the section */
+}
+
+/* Style the Product Specifications title */
+.specifications h2 {
+  font-family: 'Roboto', sans-serif; /* Apply Roboto font */
+  font-size: 24px; /* Adjust font size as needed */
+  font-weight: bold;
+  text-align: center;
+  text-decoration: underline; /* Add underline */
+  margin-bottom: 15px; /* Add space below the title */
+  margin-top: 50px;
+}
+
+/* Table for specifications */
+.specifications table {
+  width: 100%;
+  margin: 0 auto; /* Center the table */
+  border-collapse: collapse; /* Remove gaps between cells */
+}
+
+/* Style for table headers */
+.specifications th {
+  background-color: #3F3F3F; /* Dark background for headers */
+  color: white; /* White text color for headers */
+  padding: 3px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  border: 1px solid #737272; /* Add bottom border for rows */
+  text-align: left; /* Left align header text */
+}
+
+/* Style for table body cells */
+.specifications td {
+  background-color: black; /* Set background color for body cells */
+  color: white; /* Ensure text is readable */
+  padding: 2px;
+  border: 1px solid #737272; /* Add bottom border for rows */
+  font-size: 12px;
+  text-align: left; /* Left align header text */
+  min-width: 100px;
+}
+
+.sales-pitch {
+  text-align: center; /* Center the title */
+  width: 100%;
+  max-width: 600px;
+  margin-top: 50px;
+}
+
+/* Style the Sales Pitch title */
+.sales-pitch h2 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: underline;
+  margin-bottom: 15px;
+}
+
+/* Style for the sales pitch table */
+.sales-pitch table {
+  width: 100%;
+  margin: 0 auto; /* Center the table */
+  border-collapse: collapse; /* Remove gaps between cells */
+  margin-bottom: 50px; /* Add space below the table */
+}
+
+/* Style for table headers */
+.sales-pitch th {
+  background-color: #3F3F3F; /* Dark background for headers */
+  color: white; /* White text color for headers */
+  padding: 3px; /* Remove padding */
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  border: 1px solid #737272; /* Add bottom border for rows */
+  text-align: left; /* Left align header text */
+}
+
+/* Style for table body cells */
+.sales-pitch td {
+  background-color: black; /* Set background color for body cells */
+  color: white; /* Ensure text is readable */
+  padding: 3px;
+  border: 1px solid #737272; /* Add bottom border for rows */
+  font-size: 12px;
+  text-align: left; /* Left align body text */
+}
+
+/* Prevent line breaks in the Feature column */
+.sales-pitch td.feature {
+  white-space: nowrap; /* Prevent line breaks for feature text */
+}
+
+/* Set the Customer Benefit column */
+.sales-pitch td.customer-benefit {
+  max-width: 300px; /* Set a maximum width for the Customer Benefit column */
+  white-space: normal; /* Allow wrapping */
+  overflow: hidden; /* Hide overflow content */
+  text-overflow: ellipsis; /* Add ellipsis (...) for overflowing text */
+}
+
+/* Add media query for larger screens */
+@media screen and (min-width: 445px) {
+  .name-price-container {
+    max-width: 600px; /* Increase the max-width when the screen is larger than 445px */
+  }
+
+  .name-price-container h1,
+  .name-price-container .price {
+    font-size: 20px; /* Slightly increase the font size for larger screens */
+  }
+}
