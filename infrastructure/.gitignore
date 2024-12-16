@@ -1,0 +1,54 @@
+# Ignore Terraform plan files
+*.tfplan
+
+# Ignore local .terraform directories
+**/.terraform/*
+
+# Ignore folder with the name .terraform
+.terraform/
+
+# Ignore .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Ignore crash log files
+crash.log
+crash.*.log
+
+# Ignore .tfvars files, which are likely to contain sensitive data, such as password, private keys, and other secrets. 
+# These should not be part of version control as they are data points which are potentially sensitive and subject to change depending on the environment.
+*.tfvars
+*.tfvars.json
+
+# Ignore override files as they are usually used to override resources locally and so are not checked in.
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files.
+.terraformrc
+terraform.rc
+
+# Ignore .terraform.lock.hcl files.
+*.terraform.lock.hcl
+
+# Ignore any .pem and .key files.
+*.pem
+*.key
+
+# Ignore .terragrunt-cache files.
+*.terragrunt-cache
+
+# Ignore .terragrunt_lock.hcl files.
+*.terragrunt_lock.hcl
+
+# Ignore .backend.tf file.
+backend.tf
+
+# Ignore all Draw.io files
+*.drawio
+
+# Ignore all files that uses the .dio and .xml extensions
+*.dio
+*.xml
