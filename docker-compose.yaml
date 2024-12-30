@@ -1,31 +1,31 @@
-version: '3'
-services:
-  nginx:
-    depends_on:
-      - api
-      - client
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
-    ports:
-      - '3050:80'
-  api:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./server
-    volumes:
-      - /app/node_modules
-      - ./server:/app
-    env_file:
-      - ./server/.env
-  client:
-    environment:
-      - WDS_SOCKET_PORT=0
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./client
-    volumes:
-      - /home/node/app/node_modules
-      - ./client:/home/node/app
+version: '3'                            # Specify the Docker Compose version
+services:                               # Define the services that will run in the Docker Compose environment
+  nginx:                                # Define the nginx service
+    depends_on:                         # Wait for these services before starting the nginx service
+      - api                             # Wait for the api service to start
+      - client                          # Wait for the client service to start
+    restart: always                     # Always restart this container if it stops
+    build:                              # Build the image for the nginx service
+      dockerfile: Dockerfile.dev        # Use the Dockerfile.dev file to build the image
+      context: ./nginx                  # Use the nginx directory as the build context
+    ports:                              # Map the ports from the host to the container
+      - '3050:80'                       # Map port 3050 on the host to port 80 in the container
+  api:                                  # Define the api service
+    build:                              # Build the image for the api service
+      dockerfile: Dockerfile.dev        # Use the Dockerfile.dev file to build the image
+      context: ./server                 # Use the server directory as the build context
+    volumes:                            # Mount volumes for code and dependencies from the host to the container
+      - /app/node_modules               # Avoid overwriting the node_modules in the container
+      - ./server:/app                   # Map local server directory to /app in the container
+    env_file:                           # Load environment variables from the specified file
+      - ./server/.env                   # Load environment variables from the .env file in the server directory
+  client:                               # Define the client service  
+    environment:                        # Set environment variables for the client service
+      - WDS_SOCKET_PORT=0               # Set the Webpack Dev Server socket port to 0
+    build:                              # Build the image for the client service
+      dockerfile: Dockerfile.dev        # Use the Dockerfile.dev file to build the image
+      context: ./client                 # Use the client directory as the build context
+    volumes:                            # Mount volumes for code from the host to the container
+      - /home/node/app/node_modules     # Avoid overwriting the node_modules in the container
+      - ./client:/home/node/app         # Map local client directory to /home/node/app in the container
 
