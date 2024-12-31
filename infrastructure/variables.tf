@@ -220,7 +220,6 @@ variable "autoscaling_desired_capacity" {
 
 variable "custom_origin_host_header" {
   description = "Custom header to ensure communication only through CloudFront"
-  default     = "luis"
   type        = string
 }
 
