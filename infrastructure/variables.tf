@@ -193,21 +193,6 @@ variable "retention_in_days" {
 }
 
 ########################################################################################################################
-## ECR
-########################################################################################################################
-
-# variable "ecr_force_delete" {
-#   description = "Forces deletion of Docker images before resource is destroyed"
-#   default     = true
-#   type        = bool
-# }
-
-# variable "hash" {
-#   description = "Task hash that simulates a unique version for every new deployment of the ECS Task"
-#   type        = string
-# }
-
-########################################################################################################################
 ## Autoscaling Group
 ########################################################################################################################
 
@@ -235,7 +220,7 @@ variable "autoscaling_desired_capacity" {
 
 variable "custom_origin_host_header" {
   description = "Custom header to ensure communication only through CloudFront"
-  default     = "Demo123"
+  default     = "luis"
   type        = string
 }
 
