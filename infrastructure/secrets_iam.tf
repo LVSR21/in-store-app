@@ -13,7 +13,7 @@ resource "aws_iam_policy" "secrets_policy" {
           "secretsmanager:GetSecretValue"                                                           # Get secret value action -  this is the action that I want to allow
         ]
         Resource = [                                                                                # List of resources that the action is allowed on:
-          "arn:aws:secretsmanager:eu-west-2:344615752961:secret:jd-mongodb-connection-string-dev-*" # ARN of the secret - this is the secret that I want to access
+          "arn:aws:secretsmanager:eu-west-2:344615752961:secret:jd-mongodb-connection-string-prod-*" # ARN of the secret - this is the secret that I want to access
         ]
       }
     ]
@@ -25,7 +25,7 @@ resource "aws_iam_policy" "secrets_policy" {
 ##############################################
 
 resource "aws_iam_role_policy_attachment" "secrets_policy_attachment" {
-  role       = "jd_ECS_TaskExecutionRole_dev"     # The role that the policy will be attached to - this is the ECS task execution role created under the 'ecs_iam.tf' file
+  role       = "jd_ECS_TaskExecutionRole_prod"     # The role that the policy will be attached to - this is the ECS task execution role created under the 'ecs_iam.tf' file
   policy_arn = aws_iam_policy.secrets_policy.arn  # The ARN of the policy that will be attached
 }
 
