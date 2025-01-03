@@ -1,12 +1,12 @@
-########################################################
-# Retrieve the ECR repository using data source
-########################################################
+##################################################
+# Retrieve the ECR repository using data source ##
+##################################################
 
 data "aws_ecr_repository" "ecr_repo" {
-  name = "jd-repo"
+  name = "jd-repo" # The name of the ECR repository.
 }
 
 
-output "ecr_repository_url" {
-  value = data.aws_ecr_repository.ecr_repo.repository_url
-}
+
+#------------------------- EXPLANATION -------------------------#
+# ECR (Elastic Container Registry) is a fully-managed Docker container registry that makes it easy for developers to store, manage, and deploy Docker container images.
