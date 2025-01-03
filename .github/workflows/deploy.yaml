@@ -1,121 +1,125 @@
-name: Build and Deploy in-store-app
+name: Build and Deploy in-store-app                         # Name of the workflow
 
-on:
-  push:
-    branches:
-      - main
+on:                                                         # Event that triggers the workflow
+  push:                                                     # Push event to the repository
+    branches:                                               # Branches to trigger the workflow
+      - main                                                # Main branch
 
-env:
-  AWS_REGION: eu-west-2
-  ECR_REPOSITORY: jd-repo
+env:                                                        # Environment variables
+  AWS_REGION: eu-west-2                                     # AWS region to deploy the application
+  ECR_REPOSITORY: jd-repo                                   # ECR repository name
 
-jobs:
+jobs:                                                       # Jobs to run - in GitHub Actions, a job is a set of steps
   # Step 1: Run tests
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+  test:                                                     # Name of the first job
+    runs-on: ubuntu-latest                                  # This job runs on a Ubuntu machine
+    steps:                                                  # Steps to run in the job 'test'
+      - uses: actions/checkout@v2                           # This action checks out the repository - v2 is the version of the action
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
+      - name: Setup Node.js                                 # This step sets up Node.js
+        uses: actions/setup-node@v2                         # This action sets up Node.js - v2 is the version of the action
+        with:                                               # With block specifies the input parameters for the action, in this case, the version of Node.js
+          node-version: '16'                                # Node.js version
           
       # Run client tests
-      - name: Install Client Dependencies
-        working-directory: ./client
-        run: npm install
+      - name: Install Client Dependencies                   # This step installs the client dependencies
+        working-directory: ./client                         # This step runs in the client directory
+        run: npm install                                    # This step installs the client dependencies using npm (node package manager)
         
-      - name: Run Client Tests
-        working-directory: ./client
-        run: npm test
+      - name: Run Client Tests                              # This step runs the client tests
+        working-directory: ./client                         # This step runs in the client directory
+        run: npm test                                       # This step runs the client tests using npm (node package manager)
         
       # Run server tests
-      - name: Install Server Dependencies
-        working-directory: ./server
-        run: npm install
+      - name: Install Server Dependencies                   # This step installs the server dependencies
+        working-directory: ./server                         # This step runs in the server directory
+        run: npm install                                    # This step installs the server dependencies using npm (node package manager)
         
-      - name: Run Server Tests
-        working-directory: ./server
-        env:
-          NODE_ENV: test
-        run: npm test
+      - name: Run Server Tests                              # This step runs the server tests
+        working-directory: ./server                         # This step runs in the server directory
+        env:                                                # Environment variables for this step
+          NODE_ENV: test                                    # Set the NODE_ENV environment variable to 'test'
+        run: npm test                                       # This step runs the server tests using npm (node package manager)
 
   # Step 2-8: Build and deploy
-  build-and-deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      TF_VAR_mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}
-    steps:
-      - uses: actions/checkout@v2
+  build-and-deploy:                                                               # Name of the second job
+    needs: test                                                                   # This job depends on the 'test' job
+    runs-on: ubuntu-latest                                                        # This job runs on a Ubuntu machine
+    env:                                                                          # Environment variables for this job
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}                         # AWS access key ID
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}                 # AWS secret access key
+      TF_VAR_mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}  # MongoDB connection string
+      TG_VAR_custom_origin_host_header: ${{ secrets.CUSTOM_ORIGIN_HOST_HEADER }}  # Custom origin host header
+    steps:                                                                        # Steps to run in the job 'build-and-deploy'
+      - uses: actions/checkout@v2                                                 # This action checks out the repository - v2 is the version of the action
 
       # Configure AWS credentials
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+      - name: Configure AWS Credentials                                           # This step configures the AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4                            # This action configures the AWS credentials - v4 is the version of the action
+        with:                                                                     # With block specifies the input parameters for the action
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}                     # AWS access key ID
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}             # AWS secret access key
+          aws-region: ${{ env.AWS_REGION }}                                       # AWS region
           
       # Authenticate with ECR
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to Amazon ECR                                                 # This step logs in to Amazon ECR
+        id: login-ecr                                                             # ID for this step
+        uses: aws-actions/amazon-ecr-login@v2                                     # This action logs in to Amazon ECR - v2 is the version of the action
       
       # Generate version number
-      - name: Generate version number
-        id: version
-        run: echo "VERSION=$(date +'%Y%m%d')-${GITHUB_SHA::7}" >> $GITHUB_ENV
+      - name: Generate version number                                             # This step generates a version number
+        id: version                                                               # ID for this step - this ID is used to reference the output of this step
+        run: echo "VERSION=$(date +'%Y%m%d')-${GITHUB_SHA::7}" >> $GITHUB_ENV     # This step generates a version number using the current date and the first 7 characters of the commit SHA
 
       # Build and push images to ECR
-      - name: Build and push nginx image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./nginx
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:in-store-app-nginx-${{ env.VERSION }}
-          push: true
+      - name: Build and push nginx image                                                                                  # This step builds and pushes the nginx image to ECR
+        uses: docker/build-push-action@v5                                                                                 # This action builds and pushes Docker images - v5 is the version of the action
+        with:                                                                                                             # With block specifies the input parameters for the action
+          context: ./nginx                                                                                                # Context for the Docker build - this means the Dockerfile is in the nginx directory
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:in-store-app-nginx-${{ env.VERSION }}   # Tags for the Docker image
+          push: true                                                                                                      # Push the Docker image to ECR
 
-      - name: Build and push client image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./client
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:in-store-app-client-${{ env.VERSION }}
-          push: true
+      - name: Build and push client image                                                                                 # This step builds and pushes the client image to ECR
+        uses: docker/build-push-action@v5                                                                                 # This action builds and pushes Docker images - v5 is the version of the action
+        with:                                                                                                             # With block specifies the input parameters for the action
+          context: ./client                                                                                               # Context for the Docker build - this means the Dockerfile is in the client directory
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:in-store-app-client-${{ env.VERSION }}  # Tags for the Docker image
+          push: true                                                                                                      # Push the Docker image to ECR
 
-      - name: Build and push api image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./server
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:in-store-app-api-${{ env.VERSION }}
-          push: true
+      - name: Build and push api image                                                                                    # This step builds and pushes the api image to ECR
+        uses: docker/build-push-action@v5                                                                                 # This action builds and pushes Docker images - v5 is the version of the action
+        with:                                                                                                             # With block specifies the input parameters for the action
+          context: ./server                                                                                               # Context for the Docker build - this means the Dockerfile is in the server directory
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:in-store-app-api-${{ env.VERSION }}     # Tags for the Docker image
+          push: true                                                                                                      # Push the Docker image to ECR
           
       # Deploy infrastructure with Terraform
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.3.0
+      - name: Setup Terraform                                                         # This step sets up Terraform
+        uses: hashicorp/setup-terraform@v2                                            # This action sets up Terraform - v2 is the version of the action
+        with:                                                                         # With block specifies the input parameters for the action
+          terraform_version: 1.3.0                                                    # Terraform version
           
-      - name: Terraform Init
-        working-directory: ./infrastructure
-        env:
-          TF_VAR_image_version: ${{ env.VERSION }}
-          TF_VAR_mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}
-        run: terraform init
+      - name: Terraform Init                                                          # This step initializes Terraform
+        working-directory: ./infrastructure                                           # This step runs in the infrastructure directory
+        env:                                                                          # Environment variables for this step
+          TF_VAR_image_version: ${{ env.VERSION }}                                    # Image version
+          TF_VAR_mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}  # MongoDB connection string
+          TG_VAR_custom_origin_host_header: ${{ secrets.CUSTOM_ORIGIN_HOST_HEADER }}  # Custom origin host header
+        run: terraform init                                                           # This step initializes Terraform
           
-      - name: Terraform Plan
-        working-directory: ./infrastructure
-        env:
-          TF_VAR_image_version: ${{ env.VERSION }}
-          TF_VAR_mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}
-        run: terraform plan -out=myplan.tfplan
+      - name: Terraform Plan                                                          # This step creates an execution plan
+        working-directory: ./infrastructure                                           # This step runs in the infrastructure directory
+        env:                                                                          # Environment variables for this step
+          TF_VAR_image_version: ${{ env.VERSION }}                                    # Image version
+          TF_VAR_mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}  # MongoDB connection string
+          TG_VAR_custom_origin_host_header: ${{ secrets.CUSTOM_ORIGIN_HOST_HEADER }}  # Custom origin host header
+        run: terraform plan -out=myplan.tfplan                                        # This step creates an execution plan and saves it to myplan.tfplan
 
-      - name: Terraform Apply
-        working-directory: ./infrastructure
-        env:
-          TF_VAR_image_version: ${{ env.VERSION }}
-          TF_VAR_mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}
-        run: terraform apply myplan.tfplan
+      - name: Terraform Apply                                                         # This step applies the changes
+        working-directory: ./infrastructure                                           # This step runs in the infrastructure directory
+        env:                                                                          # Environment variables for this step
+          TF_VAR_image_version: ${{ env.VERSION }}                                    # Image version
+          TF_VAR_mongodb_connection_string: ${{ secrets.MONGODB_CONNECTION_STRING }}  # MongoDB connection string
+          TG_VAR_custom_origin_host_header: ${{ secrets.CUSTOM_ORIGIN_HOST_HEADER }}  # Custom origin host header
+        run: terraform apply myplan.tfplan                                            # This step applies the changes using the execution plan
         

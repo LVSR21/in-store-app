@@ -1,6 +1,6 @@
-########################################################################################################################
-## Service variables
-########################################################################################################################
+##########################
+## Deployment variables ##
+##########################
 
 variable "namespace" {
   description = "Namespace for resource names"
@@ -26,19 +26,9 @@ variable "environment" {
   type        = string
 }
 
-########################################################################################################################
-## AWS credentials
-########################################################################################################################
-
-# variable "aws_access_key_id" { #Comment out for GiThUB aCTIONS
-#   description = "AWS console access key"
-#   type        = string
-# }
-
-# variable "aws_secret_access_key" { #Comment out for GiThUB aCTIONS
-#   description = "AWS console secret access key"
-#   type        = string
-# }
+###############################
+## AWS credentials variables ##
+###############################
 
 variable "region" {
   description = "AWS region"
@@ -46,20 +36,15 @@ variable "region" {
   type        = string
 }
 
-########################################################################################################################
-## Network variables
-########################################################################################################################
+#######################
+## Network variables ##
+#######################
 
 variable "parent_zone_id" {
   description = "Zone ID of in-store-app.co.uk"
   type        = string
   default     = "Z0424262FAPMZ7KJ2ASZ"
 }
-
-# variable "tld_zone_id" {
-#   description = "Top level domain hosted zone ID"
-#   type        = string
-# }
 
 variable "vpc_cidr_block" {
   description = "CIDR block for the VPC network"
@@ -74,14 +59,9 @@ variable "az_count" {
 }
 
 
-########################################################################################################################
-## EC2 Computing variables
-########################################################################################################################
-
-# variable "public_ec2_key" {
-#   description = "Public key for SSH access to EC2 instances"
-#   type        = string
-# }
+#############################
+## EC2 Computing variables ##
+#############################
 
 variable "instance_type" {
   description = "Instance type for EC2"
@@ -95,9 +75,10 @@ variable "instance_key_pair" {
   default     = "in-store-app-key-pair"
 }
 
-########################################################################################################################
-## ECS variables
-########################################################################################################################
+###################
+## ECS variables ##
+###################
+
 variable "image_version" {
   description = "Version tag for container images"
   type        = string
@@ -186,9 +167,9 @@ variable "mongodb_connection_string" {
   type        = string
 }
 
-########################################################################################################################
-## Cloudwatch
-########################################################################################################################
+##########################
+## Cloudwatch variables ##
+##########################
 
 variable "retention_in_days" {
   description = "Retention period for Cloudwatch logs"
@@ -196,24 +177,10 @@ variable "retention_in_days" {
   type        = number
 }
 
-########################################################################################################################
-## ECR
-########################################################################################################################
 
-# variable "ecr_force_delete" {
-#   description = "Forces deletion of Docker images before resource is destroyed"
-#   default     = true
-#   type        = bool
-# }
-
-# variable "hash" {
-#   description = "Task hash that simulates a unique version for every new deployment of the ECS Task"
-#   type        = string
-# }
-
-########################################################################################################################
-## Autoscaling Group
-########################################################################################################################
+#################################
+## Autoscaling Group variables ##
+#################################
 
 variable "autoscaling_max_size" {
   description = "Max size of the autoscaling group"
@@ -233,9 +200,9 @@ variable "autoscaling_desired_capacity" {
   type        = number
 }
 
-########################################################################################################################
-## ALB
-########################################################################################################################
+###################
+## ALB variables ##
+###################
 
 variable "custom_origin_host_header" {
   description = "Custom header to ensure communication only through CloudFront"
