@@ -100,6 +100,7 @@ The application is automatically deployed using GitHub Actions when changes are 
 ├── server/                 # Node.js backend
 ├── infrastructure/         # Terraform IaC
 ├── nginx/                  # Nginx configuration
+├── server-configuration/   # Ansible
 └── .github/workflows/      # CI/CD pipeline
 ```
 
