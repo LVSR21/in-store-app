@@ -1,16 +1,33 @@
 ---
-- name: Configure ECS Instances
-  hosts: tag_Role_ecs_instance  # This comes from terraform launch template for ECS instances and inventory dynamic plugin file
-  become: true # Run tasks as root on the instances
-  tasks:
-    - name: Update and upgrade all packages
-      ansible.builtin.yum:
-        name: "*"
-        state: latest
-        update_cache: yes  # Refreshes package cache first
-        update_only: no    # Allows both update and upgrade operations
+- name: Configure ECS Instances                                           # Name of the playbook
+  hosts: tag_Role_ecs_instance                                            # This tells Ansible the hosts that this playbook will run on. In this case, it will run on instances tagged with Role = "ecs-instance" (this comes from terraform launch template for ECS instances and inventory dynamic plugin file).
+  become: true                                                            # This tells Ansible to run the tasks as the root user.
+  tasks:                                                                  # This is a list of tasks that will be performed on the target hosts:
+    - name: Update and upgrade all packages                               # This is the name of the task n1
+      ansible.builtin.yum:                                                # This is the module that will be used to perform the task. In this case, it's the yum module which is used to manage packages on RHEL-based systems.
+        name: "*"                                                         # This specifies the package name to update. "*" means all packages.
+        state: latest                                                     # This specifies the state of the package. "latest" means the package will be updated to the latest version.
+        update_cache: yes                                                 # This tells Ansible to update the package cache before installing the package.
+        update_only: no                                                   # This tells Ansible to update the package only if it's already installed.
     
-    - name: Create test file
-      ansible.builtin.copy:
-        content: "Ansible test successful!\nHost: {{ ansible_hostname }}" # The {{ ansible_hostname }} is an Ansible variable that automatically contains the hostname of the target machine where the playbook is running. It's using Jinja2 template syntax (the double curly braces).
-        dest: /home/ec2-user/ansible_test
+    - name: Create test file                                              # This is the name of the task n2
+      ansible.builtin.copy:                                               # This is the module that will be used to perform the task. In this case, it's the copy module which is used to copy files to the target hosts.
+        content: "Ansible test successful!\nHost: {{ ansible_hostname }}" # This is the content of the file that will be created. In this case, it's a simple text message with the hostname of the target host. The {{ ansible_hostname }} is an Ansible variable that automatically contains the hostname of the target machine where the playbook is running. It's using Jinja2 template syntax (the double curly braces).
+        dest: /home/ec2-user/ansible_test                                 # This is the destination path where the file will be created. In this case, it's /home/ec2-user/ansible_test.
+
+
+
+# ------------------------- EXPLANATION ------------------------- #
+# Ansible playbooks are used to define a set of tasks that will be performed on the target hosts.
+# This playbook is used to configure the ECS instances.
+# The playbook is run on the ECS instances that are tagged with Role = "ecs-instance".
+
+
+# Summary:
+# 1. My Ansible inventory file (aws_ec2.yaml) defined the target hosts for this playbook. In my case uses the AWS EC2 plugin to dynamically query AWS API to get information about EC2 instances and groups them based on tags.
+# 2. My Ansible configuration file (ansible.cfg) defines default settings such as where to find the inventory file, which user to connect as, where SSK key is stores and plugin locations.
+# 3. My Ansible playbook (playbook.yaml) defines the tasks that will be performed on the target hosts.
+
+# 1. Inventory file = WHO to connect to.
+# 2. Configuration file = HOW to connect and behave.
+# 3. Playbook file = WHAT to do.

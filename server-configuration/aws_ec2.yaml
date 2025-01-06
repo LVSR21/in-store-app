@@ -1,11 +1,18 @@
-plugin: amazon.aws.aws_ec2 # This tells Ansible to use the AWS EC2 plugin for the dynamic inventory. This plugin queries AWS API to get instance information
-regions:
-  - eu-west-2
-keyed_groups: # Creates dynamic groups based on EC2 instance tags. Instances tagged with Role = "bastion" will be in the group tag_Role_bastion. Instances tagged with Role = "ecs-instance" will be in the group tag_Role_ecs_instance (these comes from my ecs_instances_launch_template and auto_scaling_group)
-  - key: tags.Role # Groups instances by their "Role" tag
-    prefix: tag_Role # Group names will be prefixed with "tag_Role_"
-filters: # Filters which EC2 instances to include:
-  instance-state-name: running # - Only includes running instances
-  tag:Environment: prod # - Only includes instances tagged with Environment=prod
-compose: # Sets variables for each host
-  ansible_host: private_ip_address # Maps the private IP address to ansible_host variable. This tells Ansible which IP to use when connecting.
+plugin: amazon.aws.aws_ec2          # This tells Ansible to use the AWS EC2 plugin for the dynamic inventory. This plugin queries AWS API to get instance information.
+regions:                            # This specifies which regions to query for EC2 instances.
+  - eu-west-2                       # This queries instances in the eu-west-2 region.
+keyed_groups:                       # This creates dynamic groups based on EC2 instance tags. Instances tagged with Role = "bastion" will be in the group tag_Role_bastion. Instances tagged with Role = "ecs-instance" will be in the group tag_Role_ecs_instance.
+  - key: tags.Role                  # This groups instances by their "Role" tag.
+    prefix: tag_Role                # This group names will be prefixed with "tag_Role".
+filters:                            # This filters which EC2 instances to include.
+  instance-state-name: running      # This make sure that only includes running instances.
+  tag:Environment: prod             # This make sure that only includes instances tagged with Environment=prod.
+compose:                            # This sets variables for each host. In here, I am setting the ansible_host variable to the private IP address of the EC2 instance. This is required because the EC2 instances are in a private subnet and we need to use the private IP address to connect to them.
+  ansible_host: private_ip_address  # This maps the private IP address to ansible_host variable. This tells Ansible which IP to use when connecting.
+
+
+
+  # ------------------------- EXPLANATION ------------------------- #
+  # The AWS EC2 plugin is a dynamic inventory plugin that queries AWS API to get information about EC2 instances. 
+  # This plugin is useful whenever instances re created and destroyed frequently. 
+  # It allows me to manage my infrastructure without having to manually update my inventory file (aws_ec2.yaml) every time an instances ares created or destroyed.
