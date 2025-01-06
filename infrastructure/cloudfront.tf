@@ -56,6 +56,8 @@ resource "aws_cloudfront_distribution" "default" {
     ssl_support_method       = "sni-only"                                     # The SSL support method that CloudFront uses to serve HTTPS requests. SNI (Server Name Indication) is a more modern method.
   }
 
+  depends_on = [ aws_acm_certificate_validation.cloudfront_certificate ] # Make sure the certificate is validated before creating the CloudFront distribution.
+
   tags = {
     Name     = "${var.namespace}_CloudFront_${var.environment}"
     Scenario = var.scenario

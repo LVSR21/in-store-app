@@ -38,7 +38,10 @@ resource "aws_alb_listener" "alb_default_listener_https" {
     Scenario = var.scenario
   }
 
-  depends_on = [aws_acm_certificate.alb_certificate]          # Make sure the certificate is created before the listener
+  depends_on = [  
+    aws_acm_certificate.alb_certificate,            # Make sure the certificate is created before creating the listener
+    aws_acm_certificate_validation.alb_certificate  # Make sure the certificate is validated before creating the listener
+    ]          
 }
 
 
