@@ -25,8 +25,8 @@ resource "aws_iam_policy" "secrets_policy" {
 ##############################################
 
 resource "aws_iam_role_policy_attachment" "secrets_policy_attachment" {
-  role       = "jd_ECS_TaskExecutionRole_prod"     # The role that the policy will be attached to - this is the ECS task execution role created under the 'ecs_iam.tf' file
-  policy_arn = aws_iam_policy.secrets_policy.arn  # The ARN of the policy that will be attached
+  role       = aws.iam_role.ecs_task_execution_role.name  # The role that the policy will be attached to - this is the ECS task execution role created under the 'ecs_iam.tf' file
+  policy_arn = aws_iam_policy.secrets_policy.arn          # The ARN of the policy that will be attached
 }
 
 
