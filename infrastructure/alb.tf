@@ -112,3 +112,6 @@ resource "aws_alb_target_group" "service_target_group" {
 # ALB runs in the public subnets.
 # ALB is a highly available component and redundant due to the multiple AZs setup.
 # ALB receives incoming traffic via ALB Listeners (e.,g HTTPS Listener that can only accept traffic on port 443).
+
+# The default action in the HTTPS Listener blocks all requests with the status code 403.
+# The Listener Rule allows access only with a valid Custom Origin Header.

@@ -105,3 +105,6 @@ The application is automatically deployed using GitHub Actions when changes are 
 
 ## Infrastructure Architecture
 ![Alt text description](./infrastructure/infrastructure_architecture.png)
+
+
+This is a live deployment!!!
