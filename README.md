@@ -100,11 +100,15 @@ The application is automatically deployed using GitHub Actions when changes are 
 ├── server/                 # Node.js backend
 ├── infrastructure/         # Terraform IaC
 ├── nginx/                  # Nginx configuration
+├── server-configuration/   # Ansible
 └── .github/workflows/      # CI/CD pipeline
 ```
 
 ## Infrastructure Architecture
 ![Alt text description](./infrastructure/infrastructure_architecture.png)
+<<<<<<< HEAD
 
 
 This is a live deployment!!!
+=======
+>>>>>>> 059367d8790c15efb8f65a0c5ac5e4f2577ec947
